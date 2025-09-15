@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UTEPGirlsWhoCodeWebsite</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
+</head>
+<body>
+    <section class="sub-header">
+        <nav>
+            <a href="index.html"><img src="images/logo.png"></a>
+            <div class="nav-links" id="navLinks">  
+                <i class="fa fa-close" onclick="hideMenu()"></i>
+                <ul>
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="about.html">ABOUT</a></li>
+                    <!-- <li><a href="officers.html">OFFICERS</a></li> -->
+                    <li><a href="getinvolved.html">GET INVOLVED</a></li>
+                    <li><a href="contact.html">CONTACT</a></li>
+                </ul>
+            </div>
+            <i class="fa fa-bars" onclick="showMenu()"></i>
+        </nav>
+            <h1>Get Involved with Girls Who Code @ UTEP</h1>
+    </section>
+    
+<!---------- Blog Page Content ---------->
+    
+    <section class="get-involved-intro">
+        <h1>Join Our Mission</h1>
+        <p>Be part of a supportive community of women in tech who are breaking barriers and building the future. Whether you are new to coding or already experienced, there is a place for you here.</p>
+    </section>
+
+    <section class="get-involved-content">
+        <h2>Ways to Get Involved:</h2>
+        <ul class="get-involved-list">
+            <li><strong>Become a Member</strong> Attend weekly meetings, workshops, and coding sessions.</li>
+            <li><strong>Collaborate on Projects</strong> Work with fellow students on exciting, real-world tech projects.</li>
+            <li><strong>Learn & Grow</strong> Gain hands-on experience, mentorship, and career development opportunities.</li>
+            <li><strong>Attend Events</strong> Participate in speaker panels, hackathons, and networking events.</li>
+            <li><strong>Leadership Opportunities</strong> Step up as a future officer or event organizer.</li>
+        </ul>
+
+        <h2>Why Join?</h2>
+        <p>By getting involved, you will not only sharpen your technical skills but also gain confidence, make friends, and join a nationwide movement to close the gender gap in technology.</p>
+
+        <a href="https://hq.girlswhocode.com" class="hero-btn teal-btn">Sign Up Today</a>
+    </section>
+
+    
+<!-------- footer ---------->
+
+<section class="footer">
+        <h4>About Us</h4>
+        <p>© 2025 Girls Who Code UTEP Chapter. Made with passion and teamwork.</p>
+        <div class="icons">
+            <a href="https://www.facebook.com/GirlsWhoCode"><i class="fa fa-facebook"></i></a>
+            <a href="https://x.com/girlswhocode"><i class="fa fa-twitter"></i></a>
+            <a href="https://www.instagram.com/gwcutep/"><i class="fa fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/company/girls-who-code-utep/posts/?feedView=all"><i class="fa fa-linkedin"></i></a>
+            <a href = "https://teams.microsoft.com/v2/"><i class="fa fa-users"></i></a>
+            <a href = "https://minetracker.utep.edu/organization/girlswhocodeutep"><i class="fa fa-star"></i></a>
+            
+        </div>
+        <a class="footer-link"><p>made with <i class="fa fa-heart-o"></i> by GWC</p></a>
+</section>      
+  
+  
+<!----JavaScript for toggle menu---->
+<script>
+    var navLinks = document.getElementById("navLinks");
+
+    function showMenu() {
+        navLinks.style.right = "0";
+    }
+
+    function hideMenu() {
+        navLinks.style.right = "-200px";
+    }
+</script> 
+    
+</body>
+</html>    
