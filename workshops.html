@@ -12,7 +12,7 @@
         <nav>
             <a href="index.html"><img src="images/logo.png"></a>
             <div class="nav-links" id="navLinks">  
-                <i class="fa fa-close" onclick="hideMenu()"></i>
+                <i class="fa fa-close" oncl ick="hideMenu()"></i>
                 <ul>
                     <li><a href="index.html">HOME</a></li>
                     <li><a href="about.html">ABOUT</a></li>
@@ -26,20 +26,41 @@
             <i class="fa fa-bars" onclick="showMenu()"></i>
         </nav>  
 
-            <h1>Calendar</h1>
+            <h1>Workshops</h1>
     </section>
     
     
-<!------- calendar content -------->
+<!------- workshops content -------->
     
-<section class="calendar">
+<section class="workshops">
 
-    <div class="calendar-col">
-        <h1>Check Our Future Events!</h1>     
+    <div class="workshops-col">
+        <h1>Girls Who Code Workshops</h1>     
+        <p>Select a workshop and enter the access code to view its materials.</p>
+    </div>
 
-        <iframe src="https://calendar.google.com/calendar/embed?src=68ed93db491bbfb7d0e834b42b6bebad3bba2bc015de8767753910823f2022bd%40group.calendar.google.com&ctz=America%2FDenver" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
-    </div>  
+    <div class="workshop">
+        <h2>Halloween 2025 Workshop</h2>
+        <button class="teal-btn" onclick="checkCode('halloweenWorkshop.html', 'boo2025')"> Access Workshop</button>
+    </div>
+
+    <div class="workshop">
+        <h2>Intro to HTML Workshop</h2>
+        <button class="teal-btn" onclick="checkCode('htmlWorkshop.html', 'GWC2025')"> Access Workshop </button>
+    </div>
+
 </section>
+
+    <script>
+        function checkCode(targetPage, correctCode) {
+            const userCode = prompt("Enter the workshop access code:");
+            if (userCode === correctCode) {
+                window.location.href = targetPage;
+            } else {
+                alert("Incorrect code. Please try again!");
+            }
+        }
+    </script>
     
 <!-------- footer ---------->
 
