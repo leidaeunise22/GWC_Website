@@ -12,12 +12,13 @@
         <nav>
             <a href="index.html"><img src="images/logo.png"></a>
             <div class="nav-links" id="navLinks">  
-                <i class="fa fa-close" onclick="hideMenu()"></i>
+                <i class="fa fa-close" oncl ick="hideMenu()"></i>
                 <ul>
                     <li><a href="index.html">HOME</a></li>
                     <li><a href="about.html">ABOUT</a></li>
                     <li><a href="officers.html">OFFICERS</a></li>
                     <li><a href="getinvolved.html">GET INVOLVED</a></li>
+                    <li><a href="workshops.html">WORKSHOPS</a></li>
                     <li><a href="calendar.html">CALENDAR</a></li>
                     <li><a href="contact.html">CONTACT</a></li>
                 </ul>
@@ -35,25 +36,31 @@
 
     <div class="workshops-col">
         <h1>Girls Who Code Workshops</h1>     
-        <p> Select a workshop and enter the access code to view its materials. </p>
+        <p>Select a workshop and enter the access code to view its materials.</p>
     </div>
 
     <div class="workshop">
-        <h2> Halloween 2025 Workshop</h2>
-        <button onclick ="checkCode('halloweenWorkshop.html', 'boo2025')" > Access Workshop</button>
+        <h2>Halloween 2025 Workshop</h2>
+        <button class="teal-btn" onclick="checkCode('halloweenWorkshop.html', 'boo2025')"> Access Workshop</button>
     </div>
-    
+
+    <div class="workshop">
+        <h2>Intro to HTML Workshop</h2>
+        <button class="teal-btn" onclick="checkCode('htmlWorkshop.html', 'GWC2025')"> Access Workshop </button>
+    </div>
+
+</section>
+
     <script>
         function checkCode(targetPage, correctCode) {
-            const userCode = prompt("Enter the workshop access code: ");
-            if(userCode === correctCode) {
+            const userCode = prompt("Enter the workshop access code:");
+            if (userCode === correctCode) {
                 window.location.href = targetPage;
             } else {
                 alert("Incorrect code. Please try again!");
             }
         }
     </script>
-</section>
     
 <!-------- footer ---------->
 

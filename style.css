@@ -514,7 +514,57 @@ h1{
 
 /*------- Workshops Page ------------*/
 
+.workshops{
+  width: 80%;
+  margin: auto;
+  padding-top: 80px;
+  padding-bottom: 50px;
+  justify-content: space-between;
+  flex-wrap: wrap; 
+}
 
+.workshops-col{
+    flex-basis: 48%;
+    padding: 30px 2px;
+    text-align: center;
+}
+
+.workshops h1{
+    padding-top: 0;
+}
+.workshops p{
+    padding: 15px 0 25px;
+}
+
+.workshop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 20px 30px;
+  margin: 20px 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* make sure the title doesn’t stick too close to the button */
+.workshop h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+/* larger, more visually balanced button */
+.workshop .teal-btn {
+  padding: 12px 28px;
+  font-size: 1.05rem;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.workshop .teal-btn:hover {
+  transform: scale(1.05);
+}
 
 /*------- Contact Us Page ------------*/
 
