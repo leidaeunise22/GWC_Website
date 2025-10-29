@@ -41,12 +41,24 @@
 
     <div class="workshop">
         <h2>Halloween 2025 Workshop</h2>
-        <button class="teal-btn" onclick="checkCode('halloweenWorkshop.html', 'boo2025')"> Access Workshop</button>
+        <a id="workshopLink" href="https://sabina-sosa.github.io/shelloween/" target="_blank" style="display:none;"></a>
+        <button class="teal-btn" id="accessBtn">Access Workshop</button>
+        <script>
+            document.getElementById("accessBtn").addEventListener("click", function() {
+                const userCode = prompt("Enter access code:");
+
+                if (userCode === "boo2025") {
+                    document.getElementById("workshopLink").click();
+                } else {
+                    alert("Incorrect code. Please try again!");
+                }
+            });
+        </script>
     </div>
 
     <div class="workshop">
         <h2>Intro to HTML Workshop</h2>
-        <button class="teal-btn" onclick="checkCode('htmlWorkshop.html', 'GWC2025')"> Access Workshop </button>
+        <button class="teal-btn" onclick="checkCode(href='', 'GWC2025')"> Access Workshop </button>
     </div>
 
 </section>
