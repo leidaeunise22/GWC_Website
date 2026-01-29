@@ -1,0 +1,82 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Girls Who Code UTEP</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
+</head>
+<body>
+    <section class="sub-header">
+
+        <nav>
+            <a href="index.html"><img src="images/logo.png"></a>
+            <div class="nav-links" id="navLinks">  
+                <i class="fa fa-close" onclick="hideMenu()"></i>
+                <ul>
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="about.html">ABOUT</a></li>
+                    <li><a href="officers.html">OFFICERS</a></li>
+                    <li><a href="getinvolved.html">GET INVOLVED</a></li>
+                    <li><a href="workshops.html">WORKSHOPS</a></li>
+                    <li><a href="calendar.html">CALENDAR</a></li>
+                    <li><a href="contact.html">CONTACT</a></li>
+                </ul>
+            </div>
+            <i class="fa fa-bars" onclick="showMenu()"></i>
+        </nav>  
+
+            <h1>About Us</h1>
+    </section>
+    
+    
+<!------- about us content -------->
+    
+<section class="about-us">
+
+    <div class="about-col">
+        <h1>We Are Girls Who Code</h1>     
+        <p> Girls Who Code College Loops is a college community for women and non-binary students interested in tech and computer science that support one another in completing their degrees. </p>
+        <p> What makes Girls Who Code special is that we believe that in order to change the world you need more than just your coding skills. So, along with building strong ties and developing a supportive network of peers, we want you to see yourselves as: Leaders, Allies, and Learners. </p>
+        <p> College Loops members gain access to exclusive and/or early career readiness opportunities, such as meeting with industry professionals & corporate partners or participating in Girls Who Code workforce programs. </p>
+        <a href="https://girlswhocode.com" target = "_blank" class="hero-btn teal-btn">EXPLORE MORE</a>
+    </div>
+
+    <div class="about-col">
+        <img class="newsfeed-img"  src="images/vianey.png">
+    </div>   
+</section>
+    
+<!-------- footer ---------->
+
+<section class="footer">
+        <h4>About Us</h4>
+        <p>&copy 2025 Girls Who Code UTEP Chapter. Made with passion and teamwork.</p>
+        <div class="icons">
+            <a href="https://www.facebook.com/GirlsWhoCode" target = "_blank"><i class="fa fa-facebook"></i></a>
+            <a href="https://x.com/girlswhocode" target = "_blank"><i class="fa fa-twitter"></i></a>
+            <a href="https://www.instagram.com/gwcutep/" target = "_blank"><i class="fa fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/company/girls-who-code-utep/posts/?feedView=all" target = "_blank"><i class="fa fa-linkedin"></i></a>
+            <a href = "https://teams.microsoft.com/v2/" target = "_blank"><i class="fa fa-users"></i></a>
+            <a href = "https://minetracker.utep.edu/organization/girlswhocodeutep" target = "_blank"><i class="fa fa-star"></i></a>
+            
+        </div>
+        <a class="footer-link"><p>made with <i class="fa fa-heart-o"></i> by GWC</p></a>
+</section>   
+  
+  
+<!----JavaScript for toggle menu---->
+<script>
+    var navLinks = document.getElementById("navLinks");
+
+    function showMenu() {
+        navLinks.style.right = "0";
+    }
+
+    function hideMenu() {
+        navLinks.style.right = "-200px";
+    }
+</script> 
+    
+</body>
+</html>    
