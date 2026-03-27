@@ -137,7 +137,7 @@ nav .fa{
     width: 80%;
     margin: auto;
     text-align: center;
-    padding-top: 100px;
+    padding-top: 50px;
 }
 
 h1{
@@ -320,9 +320,14 @@ h1{
 
 .officer-card {
   position: relative;
-  width: 280px;
+  width: 280px !important;
   height: 350px;
   perspective: 1000px;
+
+}
+
+.color-news .officer-card{
+    margin: 0 auto;
 }
 
 .officer-inner {
@@ -626,17 +631,24 @@ h1{
 /*-----News Feed Carousel -----*/
 .news{
     width: 100%;
+    height: 100%;
+     object-fit: cover; 
     margin: auto;
     text-align: center;
 }
 .carousel-inner {
     position: relative;
-    width: 110% !important;
+    width: 100% !important;
     overflow: hidden;
 }
+
+
+
+
+
+
 /*------- News Feed Page -----*/
-.officer-front,
-.card-new {
+.officer-front.card-new {
   background: #0b0b0b;
   display: flex;
   flex-direction: column;
@@ -649,25 +661,88 @@ h1{
 }
 
 .color-news {
-  background-color: #0b0b0b;
+  background-color: #000;
   color: #ffffff;
   padding: 20px 0;
   font-family: 'Inter', 'Helvetica Neue', sans-serif;
   margin: auto;
-    padding-top: 20px;
+    padding-top: 40px;
     padding-bottom: 50px;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
 }
-.img-news img{
-    width: 70% !important;
-    margin-left: 15%;
+
+.text-box-center{
+  width: 90%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
-.news-img{
-    width: 70% !important;
-    margin-left: 5%;
+
+.feature-split {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(to right, #009688 33%, #000 33%);
+  overflow: hidden;
+  padding: 50px 0;
 }
+
+.feature-image {
+  position: absolute;
+  left: 16%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.feature-image img {
+  width: 400px;
+  max-width: 100%;
+  display: block;
+  box-shadow: -30px 30px 35px rgba(0, 0, 0, 0.35);
+}
+
+.feature-text {
+  margin-left: 50%;
+
+  width: 42%;
+  color: white;
+  z-index: 3;
+}
+
+.feature-title {
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  font-size: 2.3rem;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 18px;
+  color: #f5f5f5;
+  text-transform: uppercase;
+}
+
+.feature-subtitle {
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #d663c1;
+  margin-bottom: 24px;
+}
+
+.feature-text p {
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #f2f2f2;
+  margin-bottom: 28px;
+}
+
+/* FINAL PAGE NEWS */
+
 
 /* Image */
 
@@ -724,6 +799,32 @@ h1{
   }
 }
 
+@media (max-width: 576px) {
+  .feature-image {
+    position: relative;
+    transform: none !important;
+    left: auto;
+  }
+  .feature-image img {
+    width: 80%;
+    margin: 0 auto;
+  }
+  .feature-text{
+    margin: 0 auto;
+  }
+  .feature-split{
+    background: #000;
+  }
+  .row.feature-split{
+    flex-direction:row;
+  }
+  .officer-card {
+    width: calc(100% - 40px);
+    padding-left: 20px;
+  }
+
+}
+
 @media (max-width: 480px) {
   .sub-header h1 {
     font-size: 1.5rem;
@@ -732,6 +833,7 @@ h1{
   .about-us {
     width: 95%;
   }
+
 }
 
 
