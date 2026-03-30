@@ -447,13 +447,13 @@
   const app  = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db   = getFirestore(app);
-
+ 
   let countdownInterval = null;
-
+ 
   // ── Nav menu ─────────────────────────────────────────────
   window.showMenu = () => { document.getElementById("navLinks").style.right = "0"; };
   window.hideMenu = () => { document.getElementById("navLinks").style.right = "-200px"; };
-
+ 
   // ── Tab switching ────────────────────────────────────────
   document.querySelectorAll(".tab-btn").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -464,7 +464,7 @@
       if (btn.dataset.tab === "submissions") loadSubmissions();
     });
   });
-
+ 
   // ── Auth: wait for Firebase before showing anything ──────
   onAuthStateChanged(auth, user => {
     if (user) {
@@ -478,18 +478,18 @@
       window.location.replace("officer-login.html");
     }
   });
-
+ 
   // ── Logout ───────────────────────────────────────────────
   document.getElementById("logoutBtn").addEventListener("click", async () => {
     await signOut(auth);
     window.location.replace("officer-login.html");
   });
-
+ 
   // ── Helpers ──────────────────────────────────────────────
   function randomFiveDigit() {
     return String(Math.floor(10000 + Math.random() * 90000));
   }
-
+ 
   function formatCountdown(ms) {
     if (ms <= 0) return "00:00";
     const totalSec = Math.floor(ms / 1000);
@@ -497,28 +497,28 @@
     const secs = totalSec % 60;
     return String(mins).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
   }
-
+ 
   // ── Load Workshops ───────────────────────────────────────
   async function loadWorkshops() {
     const list         = document.getElementById("workshopList");
     const codeSelect   = document.getElementById("codeWorkshopSelect");
     const filterSelect = document.getElementById("filterWorkshop");
-
+ 
     list.innerHTML = "<div class='empty-state'>Loading…</div>";
     codeSelect.innerHTML   = "<option value=''>— Select a workshop —</option>";
     filterSelect.innerHTML = "<option value='all'>All Workshops</option>";
-
+ 
     const snap = await getDocs(query(collection(db, "workshops"), orderBy("createdAt", "desc")));
-
+ 
     if (snap.empty) {
       list.innerHTML = "<div class='empty-state'>No workshops yet. Add one above!</div>";
       return;
     }
-
+ 
     list.innerHTML = "";
     snap.forEach(d => renderWorkshopRow(d.id, d.data(), list, codeSelect, filterSelect));
   }
-
+ 
   function renderWorkshopRow(id, w, list, codeSelect, filterSelect) {
     const date = w.createdAt?.toDate().toLocaleDateString() || "Today";
     const item = document.createElement("div");
@@ -529,10 +529,10 @@
       <span class="w-pts">${w.points} pts</span>
       <span class="w-date">Added ${date}</span>
       <button class="delete-btn">Delete</button>`;
-
+ 
     item.querySelector(".delete-btn").addEventListener("click", () => deleteWorkshop(id, w.name));
     list.appendChild(item);
-
+ 
     if (codeSelect && !codeSelect.querySelector(`option[value="${id}"]`)) {
       codeSelect.appendChild(new Option(w.name, id));
     }
@@ -540,34 +540,34 @@
       filterSelect.appendChild(new Option(w.name, w.name));
     }
   }
-
+ 
   // ── Add Workshop ─────────────────────────────────────────
   document.getElementById("addWorkshopBtn").addEventListener("click", async () => {
     const name   = document.getElementById("wName").value.trim();
     const points = parseInt(document.getElementById("wPoints").value);
     const msgEl  = document.getElementById("addWorkshopMsg");
-
+ 
     if (!name)   { msgEl.style.color = "#c62828"; msgEl.textContent = "Please enter a workshop name."; return; }
     if (isNaN(points) || points < 1) { msgEl.style.color = "#c62828"; msgEl.textContent = "Please enter a valid points value."; return; }
-
+ 
     const btn = document.getElementById("addWorkshopBtn");
     btn.disabled = true;
     btn.textContent = "Adding…";
-
+ 
     try {
       const addWithTimeout = Promise.race([
         addDoc(collection(db, "workshops"), { name, points, createdAt: Timestamp.now() }),
-        new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore timed out after 10 seconds. Check your Firebase config and Firestore rules.")), 10000))
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore timed out. Please try again.")), 30000))
       ]);
       const newDoc = await addWithTimeout;
-
+ 
       const list         = document.getElementById("workshopList");
       const codeSelect   = document.getElementById("codeWorkshopSelect");
       const filterSelect = document.getElementById("filterWorkshop");
-
+ 
       if (list.querySelector(".empty-state")) list.innerHTML = "";
       renderWorkshopRow(newDoc.id, { name, points, createdAt: null }, list, codeSelect, filterSelect);
-
+ 
       msgEl.style.color = "#00695c";
       msgEl.textContent = `✅ "${name}" added!`;
       document.getElementById("wName").value   = "";
@@ -582,43 +582,43 @@
       btn.textContent = "Add Workshop";
     }
   });
-
+ 
   // ── Delete Workshop ──────────────────────────────────────
   async function deleteWorkshop(id, name) {
     if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
     await deleteDoc(doc(db, "workshops", id));
-
+ 
     // Remove from UI instantly
     const item = document.getElementById("w-" + id);
     if (item) item.remove();
-
+ 
     // Remove from dropdowns
     const codeOpt   = document.querySelector(`#codeWorkshopSelect option[value="${id}"]`);
     const filterOpt = document.querySelector(`#filterWorkshop option[value="${name}"]`);
     if (codeOpt)   codeOpt.remove();
     if (filterOpt) filterOpt.remove();
-
+ 
     // Show empty state if nothing left
     const list = document.getElementById("workshopList");
     if (!list.querySelector(".workshop-item")) {
       list.innerHTML = "<div class='empty-state'>No workshops yet. Add one above!</div>";
     }
   }
-
+ 
   // ── Generate Timed Code ──────────────────────────────────
   document.getElementById("generateBtn").addEventListener("click", async () => {
     const workshopId = document.getElementById("codeWorkshopSelect").value;
     const minutes    = parseInt(document.getElementById("codeDuration").value);
-
+ 
     if (!workshopId) { alert("Please select a workshop first."); return; }
-
+ 
     const wDoc = await getDoc(doc(db, "workshops", workshopId));
     if (!wDoc.exists()) { alert("Workshop not found."); return; }
     const workshop = wDoc.data();
-
+ 
     const code      = randomFiveDigit();
     const expiresAt = Date.now() + minutes * 60 * 1000;
-
+ 
     await setDoc(doc(db, "activeCodes", workshopId), {
       code,
       workshopId,
@@ -627,16 +627,16 @@
       expiresAt:     Timestamp.fromMillis(expiresAt),
       createdAt:     Timestamp.now()
     });
-
+ 
     document.getElementById("activeWorkshopLabel").textContent = workshop.name;
     document.getElementById("activeCode").textContent          = code;
     document.getElementById("activeCodeBox").style.display     = "block";
     document.getElementById("expiredNotice").style.display     = "none";
     document.getElementById("copyCodeBtn").style.display       = "inline-block";
-
+ 
     if (countdownInterval) clearInterval(countdownInterval);
     const countdownEl = document.getElementById("countdown");
-
+ 
     countdownInterval = setInterval(() => {
       const remaining = expiresAt - Date.now();
       if (remaining <= 0) {
@@ -651,20 +651,20 @@
       }
     }, 1000);
   });
-
+ 
   document.getElementById("copyCodeBtn").addEventListener("click", () => {
     navigator.clipboard.writeText(document.getElementById("activeCode").textContent)
       .then(() => alert("Code copied!"));
   });
-
+ 
   // ── Load Submissions ─────────────────────────────────────
   async function loadSubmissions() {
     const tbody  = document.getElementById("submissionsBody");
     const filter = document.getElementById("filterWorkshop").value;
     tbody.innerHTML = "<tr><td colspan='5' class='empty-state'>Loading…</td></tr>";
-
+ 
     const snap = await getDocs(query(collection(db, "attendance"), orderBy("submittedAt", "desc")));
-
+ 
     const rows = [];
     snap.forEach(d => {
       const s = d.data();
@@ -679,14 +679,14 @@
           <td>${date}</td>
         </tr>`);
     });
-
+ 
     tbody.innerHTML = rows.length
       ? rows.join("")
       : "<tr><td colspan='5' class='empty-state'>No submissions found.</td></tr>";
   };
-
+ 
   document.getElementById("filterWorkshop").addEventListener("change", loadSubmissions);
 </script>
-
+ 
 </body>
 </html>
