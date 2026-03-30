@@ -555,7 +555,11 @@
     btn.textContent = "Adding…";
 
     try {
-      const newDoc = await addDoc(collection(db, "workshops"), { name, points, createdAt: Timestamp.now() });
+      const addWithTimeout = Promise.race([
+        addDoc(collection(db, "workshops"), { name, points, createdAt: Timestamp.now() }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore timed out after 10 seconds. Check your Firebase config and Firestore rules.")), 10000))
+      ]);
+      const newDoc = await addWithTimeout;
 
       const list         = document.getElementById("workshopList");
       const codeSelect   = document.getElementById("codeWorkshopSelect");
