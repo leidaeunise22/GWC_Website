@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Girls Who Code UTEP – My Points</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+
+<style>
+  .lookup-intro {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 60px 20px 20px;
+    text-align: center;
+  }
+  .lookup-intro h1 { font-size: 32px; margin-bottom: 12px; }
+  .lookup-intro p  { font-size: 16px; color: #555; }
+
+  .lookup-form {
+    max-width: 500px;
+    margin: 20px auto 0;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 20px;
+  }
+
+  .lookup-form input {
+    flex: 1;
+    min-width: 260px;
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.3s;
+  }
+  .lookup-form input:focus { border-color: #009688; }
+
+  .lookup-btn {
+    padding: 12px 28px;
+    background: #009688;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .lookup-btn:hover    { background: #00796B; }
+  .lookup-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+  .results-section {
+    max-width: 700px;
+    margin: 40px auto 80px;
+    padding: 0 20px;
+    display: none;
+  }
+
+  .points-summary {
+    background: #009688;
+    color: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .points-summary .member-name {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .points-summary .total-points {
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1;
+    margin: 8px 0;
+  }
+  .points-summary .pts-label {
+    font-size: 14px;
+    opacity: 0.85;
+  }
+
+  .breakdown-card {
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    padding: 28px 32px;
+  }
+  .breakdown-card h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .workshop-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #eee;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .workshop-entry:last-child { border-bottom: none; }
+  .we-name { font-weight: 600; font-size: 15px; color: #333; }
+  .we-date { font-size: 12px; color: #aaa; }
+  .we-pts  {
+    background: #e0f2f1;
+    color: #00695c;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  .empty-result {
+    text-align: center;
+    padding: 40px;
+    color: #aaa;
+    font-size: 14px;
+  }
+
+  #lookupMessage {
+    max-width: 500px;
+    margin: 16px auto 0;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    text-align: center;
+    display: none;
+  }
+  #lookupMessage.error {
+    background: #fce4ec;
+    color: #b71c1c;
+    border: 1px solid #f48fb1;
+    display: block;
+  }
+
+  .leaderboard-link {
+    text-align: center;
+    margin-top: 24px;
+  }
+  .leaderboard-link a {
+    color: #009688;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .leaderboard-link a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .points-summary .total-points { font-size: 48px; }
+    .breakdown-card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="sub-header">
+  <nav>
+    <a href="index.html"><img src="images/logo.png"></a>
+    <div class="nav-links" id="navLinks">
+      <i class="fa fa-close" onclick="hideMenu()"></i>
+      <ul>
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="officers.html">OFFICERS</a></li>
+        <li><a href="getinvolved.html">GET INVOLVED</a></li>
+        <li><a href="workshops.html">WORKSHOPS</a></li>
+        <li><a href="calendar.html">CALENDAR</a></li>
+        <li><a href="contact.html">CONTACT</a></li>
+      </ul>
+    </div>
+    <i class="fa fa-bars" onclick="showMenu()"></i>
+  </nav>
+  <h1>My Points</h1>
+</section>
+
+<div class="lookup-intro">
+  <h1>Check Your Points</h1>
+  <p>Enter your UTEP email to see your total points and workshop history.</p>
+</div>
+
+<div class="lookup-form">
+  <input type="email" id="lookupEmail" placeholder="you@miners.utep.edu">
+  <button class="lookup-btn" id="lookupBtn">Look Up</button>
+</div>
+<div id="lookupMessage"></div>
+
+<div class="results-section" id="resultsSection">
+  <div class="points-summary">
+    <div class="member-name" id="memberName"></div>
+    <div class="total-points" id="totalPoints">0</div>
+    <div class="pts-label">total points</div>
+  </div>
+
+  <div class="breakdown-card">
+    <h2>Workshop History</h2>
+    <div id="workshopBreakdown"></div>
+  </div>
+
+  <div class="leaderboard-link">
+    <a href="leaderboard.html">🏆 View Full Leaderboard</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<section class="footer">
+  <h4>About Us</h4>
+  <p>&copy 2025 Girls Who Code UTEP Chapter. Made with passion and teamwork.</p>
+  <div class="icons">
+    <a href="https://www.facebook.com/GirlsWhoCode" target="_blank"><i class="fa fa-facebook"></i></a>
+    <a href="https://x.com/girlswhocode" target="_blank"><i class="fa fa-twitter"></i></a>
+    <a href="https://www.instagram.com/gwcutep/" target="_blank"><i class="fa fa-instagram"></i></a>
+    <a href="https://www.linkedin.com/company/girls-who-code-utep/posts/?feedView=all" target="_blank"><i class="fa fa-linkedin"></i></a>
+    <a href="https://teams.microsoft.com/v2/" target="_blank"><i class="fa fa-users"></i></a>
+    <a href="https://minetracker.utep.edu/organization/girlswhocodeutep" target="_blank"><i class="fa fa-star"></i></a>
+  </div>
+  <a class="footer-link"><p>made with <i class="fa fa-heart-o"></i> by GWC</p></a>
+</section>
+
+<script>
+  var navLinks = document.getElementById("navLinks");
+  function showMenu() { navLinks.style.right = "0"; }
+  function hideMenu() { navLinks.style.right = "-200px"; }
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, query, where, getDocs, orderBy }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAHTRf40x8Z6gfSM-2yQOn825IRsEV3sfg",
+    authDomain: "gwc-tracker-84577.firebaseapp.com",
+    projectId: "gwc-tracker-84577",
+    storageBucket: "gwc-tracker-84577.firebasestorage.app",
+    messagingSenderId: "250632343424",
+    appId: "1:250632343424:web:e977f8bc2c2f581c3f7b65",
+    measurementId: "G-DVK995JRFJ"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  const lookupBtn   = document.getElementById("lookupBtn");
+  const lookupEmail = document.getElementById("lookupEmail");
+  const msgEl       = document.getElementById("lookupMessage");
+
+  lookupBtn.addEventListener("click", doLookup);
+  lookupEmail.addEventListener("keydown", e => { if (e.key === "Enter") doLookup(); });
+
+  async function doLookup() {
+    const email = lookupEmail.value.trim().toLowerCase();
+    msgEl.className = "";
+    msgEl.style.display = "none";
+    document.getElementById("resultsSection").style.display = "none";
+
+    if (!email.endsWith("@miners.utep.edu") && !email.endsWith("@utep.edu")) {
+      msgEl.textContent = "Please enter a valid UTEP email.";
+      msgEl.className = "error";
+      return;
+    }
+
+    lookupBtn.disabled = true;
+    lookupBtn.textContent = "Looking up…";
+
+    try {
+      const snap = await getDocs(query(
+        collection(db, "attendance"),
+        where("email", "==", email),
+        orderBy("submittedAt", "desc")
+      ));
+
+      if (snap.empty) {
+        msgEl.textContent = "No points found for that email. Make sure you've submitted attendance at a workshop!";
+        msgEl.className = "error";
+        return;
+      }
+
+      let total = 0;
+      let firstName = "";
+      let lastName  = "";
+      const rows = [];
+
+      snap.forEach(d => {
+        const s = d.data();
+        total += s.pointsAwarded || 0;
+        if (!firstName) { firstName = s.firstName; lastName = s.lastName; }
+        const date = s.submittedAt?.toDate().toLocaleDateString() || "";
+        rows.push(`
+          <div class="workshop-entry">
+            <div>
+              <div class="we-name">${s.workshopName}</div>
+              <div class="we-date">${date}</div>
+            </div>
+            <span class="we-pts">+${s.pointsAwarded} pts</span>
+          </div>`);
+      });
+
+      document.getElementById("memberName").textContent = `${firstName} ${lastName}`;
+      document.getElementById("totalPoints").textContent = total;
+      document.getElementById("workshopBreakdown").innerHTML = rows.join("");
+      document.getElementById("resultsSection").style.display = "block";
+
+    } catch (err) {
+      console.error(err);
+      msgEl.textContent = "Something went wrong. Please try again.";
+      msgEl.className = "error";
+    } finally {
+      lookupBtn.disabled = false;
+      lookupBtn.textContent = "Look Up";
+    }
+  }
+</script>
+
+</body>
+</html>
