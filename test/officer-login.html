@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Girls Who Code UTEP – Officer Login</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+
+<style>
+  /* Hide everything until Firebase is ready */
+  body { background: #fff; }
+
+  #loadingScreen {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e0f2f1;
+    border-top-color: #009688;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #pageContent { display: none; }
+
+  .login-wrapper {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+  }
+
+  .login-box {
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+  }
+
+  .login-box img {
+    width: 80px;
+    margin-bottom: 16px;
+  }
+
+  .login-box h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+  }
+
+  .login-box p {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 28px;
+  }
+
+  .login-box label {
+    display: block;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 6px;
+    margin-top: 16px;
+  }
+
+  .login-box input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.3s;
+  }
+
+  .login-box input:focus { border-color: #009688; }
+
+  .login-btn {
+    width: 100%;
+    margin-top: 28px;
+    padding: 14px;
+    background: #009688;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .login-btn:hover    { background: #00796B; }
+  .login-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+  #loginMessage {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none;
+  }
+  #loginMessage.error {
+    background: #fce4ec;
+    color: #b71c1c;
+    border: 1px solid #f48fb1;
+    display: block;
+  }
+
+  @media (max-width: 480px) {
+    .login-box { padding: 32px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Loading screen shown until Firebase resolves auth state -->
+<div id="loadingScreen">
+  <div class="spinner"></div>
+</div>
+
+<!-- Page content hidden until ready -->
+<div id="pageContent">
+  <section class="sub-header">
+    <nav>
+      <a href="index.html"><img src="images/logo.png"></a>
+      <div class="nav-links" id="navLinks">
+        <i class="fa fa-close" onclick="hideMenu()"></i>
+        <ul>
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="about.html">ABOUT</a></li>
+          <li><a href="officers.html">OFFICERS</a></li>
+          <li><a href="getinvolved.html">GET INVOLVED</a></li>
+          <li><a href="workshops.html">WORKSHOPS</a></li>
+          <li><a href="calendar.html">CALENDAR</a></li>
+          <li><a href="contact.html">CONTACT</a></li>
+        </ul>
+      </div>
+      <i class="fa fa-bars" onclick="showMenu()"></i>
+    </nav>
+    <h1>Officer Portal</h1>
+  </section>
+
+  <div class="login-wrapper">
+    <div class="login-box">
+      <img src="images/logo.png" alt="GWC Logo">
+      <h2>Officer Login</h2>
+      <p>Sign in with your UTEP email to access the dashboard.</p>
+
+      <label for="loginEmail">UTEP Email</label>
+      <input type="email" id="loginEmail" placeholder="you@miners.utep.edu">
+
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" placeholder="Enter your password">
+
+      <button class="login-btn" id="loginBtn">Sign In</button>
+      <div id="loginMessage"></div>
+    </div>
+  </div>
+
+  <section class="footer">
+    <h4>About Us</h4>
+    <p>&copy 2025 Girls Who Code UTEP Chapter. Made with passion and teamwork.</p>
+    <div class="icons">
+      <a href="https://www.facebook.com/GirlsWhoCode" target="_blank"><i class="fa fa-facebook"></i></a>
+      <a href="https://x.com/girlswhocode" target="_blank"><i class="fa fa-twitter"></i></a>
+      <a href="https://www.instagram.com/gwcutep/" target="_blank"><i class="fa fa-instagram"></i></a>
+      <a href="https://www.linkedin.com/company/girls-who-code-utep/posts/?feedView=all" target="_blank"><i class="fa fa-linkedin"></i></a>
+      <a href="https://teams.microsoft.com/v2/" target="_blank"><i class="fa fa-users"></i></a>
+      <a href="https://minetracker.utep.edu/organization/girlswhocodeutep" target="_blank"><i class="fa fa-star"></i></a>
+    </div>
+    <a class="footer-link"><p>made with <i class="fa fa-heart-o"></i> by GWC</p></a>
+  </section>
+</div>
+
+<script>
+  var navLinks = document.getElementById("navLinks");
+  function showMenu() { navLinks.style.right = "0"; }
+  function hideMenu() { navLinks.style.right = "-200px"; }
+</script>
+
+<script type="module">
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAHTRf40x8Z6gfSM-2yQOn825IRsEV3sfg",
+    authDomain: "gwc-tracker-84577.firebaseapp.com",
+    projectId: "gwc-tracker",
+    storageBucket: "gwc-tracker-84577.firebasestorage.app",
+    messagingSenderId: "250632343424",
+    appId: "1:250632343424:web:e977f8bc2c2f581c3f7b65",
+    measurementId: "G-DVK995JRFJ"
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Wait for Firebase to resolve auth state ONCE before showing anything
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Already logged in — go to dashboard (no flicker, loading screen covers it)
+      window.location.replace("officer-dashboard.html");
+    } else {
+      // Not logged in — show the login form
+      document.getElementById("loadingScreen").style.display = "none";
+      document.getElementById("pageContent").style.display = "block";
+    }
+  });
+
+  // Sign in
+  document.getElementById("loginBtn").addEventListener("click", handleLogin);
+  document.getElementById("loginPassword").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") handleLogin();
+  });
+
+  async function handleLogin() {
+    const btn = document.getElementById("loginBtn");
+    const msg = document.getElementById("loginMessage");
+    msg.className = "";
+    msg.style.display = "none";
+
+    const email    = document.getElementById("loginEmail").value.trim().toLowerCase();
+    const password = document.getElementById("loginPassword").value;
+
+    if (!email.endsWith("@miners.utep.edu") && !email.endsWith("@utep.edu")) {
+      msg.textContent = "Please use your UTEP email (@miners.utep.edu or @utep.edu).";
+      msg.className = "error";
+      return;
+    }
+
+    if (!password) {
+      msg.textContent = "Please enter your password.";
+      msg.className = "error";
+      return;
+    }
+
+    try {
+      btn.disabled = true;
+      btn.textContent = "Signing in…";
+      await signInWithEmailAndPassword(auth, email, password);
+      // onAuthStateChanged will fire and redirect automatically
+    } catch (err) {
+      let errorMsg = "Incorrect email or password. Please try again.";
+      if (err.code === "auth/too-many-requests") {
+        errorMsg = "Too many failed attempts. Please try again later.";
+      }
+      msg.textContent = errorMsg;
+      msg.className = "error";
+      btn.disabled = false;
+      btn.textContent = "Sign In";
+    }
+  }
+</script>
+
+</body>
+</html>
