@@ -1,0 +1,25 @@
+.row{
+    margin-right: 0px !important;
+    --bs-gutter-x: 0px !important;
+}
+ 
+.list-group-item-action {
+    left: 10% !important;
+    width: 80% !important;
+    color: #009688 !important;
+    background-color: #ffffff !important;
+    border-bottom: 1px solid black !important;
+}
+.list-group-item-action:hover{
+    background-color: rgba(25, 141, 112, 0.589) !important;
+    color: #ffffff !important;
+}
+button{
+    padding: 0 !important;
+}
+
+.img-fluid {
+    max-width: 300px !important;
+    height: none;
+    display: flex;
+}
