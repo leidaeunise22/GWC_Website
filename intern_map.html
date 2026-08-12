@@ -164,17 +164,17 @@
             </div>
         `);
 
-        const utepRegion = L.marker(
-            [31.7700, -106.5048]
-        );
+        // const utepRegion = L.marker(
+        //     [31.7700, -106.5048]
+        // );
 
-        utepRegion.bindPopup(`
-            <div class="internship-popup">
-                <h3>UTEP</h3>
-                // <p>White Sands Missile Range</p>
-                <p>Click to explore internships in this area.</p>
-            </div>
-        `);
+        // utepRegion.bindPopup(`
+        //     <div class="internship-popup">
+        //         <h3>UTEP</h3>
+        //         // <p>White Sands Missile Range</p>
+        //         <p>Click to explore internships in this area.</p>
+        //     </div>
+        // `);
 
 
         const northeastRegion = L.marker(
@@ -267,51 +267,239 @@
             { icon: microsoftIcon }
         );
 
-        microsoftMarker.bindPopup(`
-            <div class="internship-popup">
+       microsoftMarker.bindPopup(`
+        <div class="internship-popup carousel">
 
-                <h3>Microsoft</h3>
+            <button class="carousel-btn prev-btn">&#10094;</button>
 
-                <h4>
-                    <strong>Vianey Martinez</strong>
-                </h4>
+            <div class="carousel-content">
 
-                <p>
-                    <strong>
-                        Explore Intern (Summer 2025) /
-                        Software Engineer Intern (Summer 2026)
-                    </strong>
-                </p>
+                <!-- Person 1 -->
+                <div class="carousel-slide active">
 
-                <p>
-                    <strong>05/26/26 - 08/14/26</strong>
-                </p>
+                    <h3>Microsoft</h3>
 
-                <p>
-                    Redmond/Seattle, Washington
-                </p>
+                    <h4>
+                        <strong>Vianey Martinez</strong>
+                    </h4>
 
-                <p>
-                    During my internship at Microsoft, I worked on an AI-based
-                    onboarding solution that helps Azure Resource Providers assess
-                    their Soft Delete readiness through automated analysis and
-                    reporting, and my favorite part was learning how AI is evolving
-                    and changing software development and engineering workflows
-                    while networking with professionals across the company and
-                    learning from their experiences.
-                </p>
+                    <p>
+                        <strong>
+                            Explore Intern (Summer 2025) /
+                            Software Engineer Intern (Summer 2026)
+                        </strong>
+                    </p>
+
+                    <p>
+                        <strong>05/26/26 - 08/14/26</strong>
+                    </p>
+
+                    <p>
+                        Redmond/Seattle, Washington
+                    </p>
+
+                    <p>
+                        During my internship at Microsoft, I worked on an AI-based
+                        onboarding solution that helps Azure Resource Providers assess
+                        their Soft Delete readiness through automated analysis and reporting.
+                    </p>
+
+                    <div class="carousel-counter">
+                        1 of 2
+                    </div>
+
+                </div>
+
+
+                <!-- Person 2 -->
+                <div class="carousel-slide">
+
+                    <h3>Microsoft</h3>
+
+                    <h4>
+                        <strong>Second Person</strong>
+                    </h4>
+
+                    <p>
+                        <strong>Internship Position</strong>
+                    </p>
+
+                    <p>
+                        <strong>Dates</strong>
+                    </p>
+
+                    <p>
+                        Redmond, Washington
+                    </p>
+
+                    <p>
+                        Second person's description goes here.
+                    </p>
+
+                    <div class="carousel-counter">
+                        2 of 2
+                    </div>
+
+                </div>
 
             </div>
-        `);
 
-        microsoftMarker.on("mouseover", function () {
-            this.openPopup();
+            <button class="carousel-btn next-btn">&#10095;</button>
+
+        </div>
+    `, {
+        maxWidth: 350,
+        minWidth: 320,
+        autoPan: true,
+        autoPanPadding: [50, 50],
+        closeOnClick: false
+    });
+
+    
+let currentMicrosoftSlide = 0;
+let microsoftTimer;
+
+
+// Open popup when hovering over Microsoft marker
+microsoftMarker.on("mouseover", function () {
+
+    clearTimeout(microsoftTimer);
+    microsoftMarker.openPopup();
+
+});
+
+
+// Give user time to move from marker to popup
+microsoftMarker.on("mouseout", function () {
+
+    clearTimeout(microsoftTimer);
+
+    microsoftTimer = setTimeout(function () {
+        microsoftMarker.closePopup();
+    }, 1200);
+
+});
+
+
+microsoftMarker.on("popupopen", function () {
+
+    const popupElement = microsoftMarker.getPopup().getElement();
+
+    if (!popupElement) {
+        return;
+    }
+
+
+    // Prevent clicks inside popup from affecting Leaflet map
+    L.DomEvent.disableClickPropagation(popupElement);
+    L.DomEvent.disableScrollPropagation(popupElement);
+
+
+    // Keep popup open when mouse enters it
+    popupElement.onmouseenter = function () {
+        clearTimeout(microsoftTimer);
+    };
+
+
+    // Keep popup open when clicking inside
+    popupElement.onmousedown = function () {
+        clearTimeout(microsoftTimer);
+    };
+
+
+    // Close popup after leaving
+    popupElement.onmouseleave = function () {
+
+        clearTimeout(microsoftTimer);
+
+        microsoftTimer = setTimeout(function () {
+            microsoftMarker.closePopup();
+        }, 800);
+
+    };
+
+
+    // Get carousel elements
+    const slides =
+        popupElement.querySelectorAll(".carousel-slide");
+
+    const nextButton =
+        popupElement.querySelector(".next-btn");
+
+    const prevButton =
+        popupElement.querySelector(".prev-btn");
+
+
+    if (!slides.length || !nextButton || !prevButton) {
+        return;
+    }
+
+
+    function showSlide(index) {
+
+        slides.forEach(function (slide) {
+            slide.classList.remove("active");
         });
 
-        microsoftMarker.on("mouseout", function () {
-            this.closePopup();
-        });
+        slides[index].classList.add("active");
 
+    }
+
+
+    // NEXT BUTTON
+    nextButton.onmousedown = function (event) {
+
+        event.stopPropagation();
+        clearTimeout(microsoftTimer);
+
+    };
+
+
+    nextButton.onclick = function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        clearTimeout(microsoftTimer);
+
+        currentMicrosoftSlide =
+            (currentMicrosoftSlide + 1) % slides.length;
+
+        showSlide(currentMicrosoftSlide);
+
+    };
+
+
+    // PREVIOUS BUTTON
+    prevButton.onmousedown = function (event) {
+
+        event.stopPropagation();
+        clearTimeout(microsoftTimer);
+
+    };
+
+
+    prevButton.onclick = function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        clearTimeout(microsoftTimer);
+
+        currentMicrosoftSlide--;
+
+        if (currentMicrosoftSlide < 0) {
+            currentMicrosoftSlide = slides.length - 1;
+        }
+
+        showSlide(currentMicrosoftSlide);
+
+    };
+
+
+    showSlide(currentMicrosoftSlide);
+
+});
 
 
         // =================================================
@@ -484,7 +672,271 @@
             this.closePopup();
         });
 
+        
+        // =================================================
+        // UTEP
+        // =================================================
 
+        const utepIcon = L.icon({
+            iconUrl: "images/utep.png",
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        const utepMarker = L.marker(
+            [31.7700, -106.5048],
+            { icon: utepIcon }
+        );
+
+        utepMarker.bindPopup(`
+            <div class="internship-popup carousel">
+
+                <button class="carousel-btn prev-btn">&#10094;</button>
+
+                <div class="carousel-content">
+
+                    <!-- Person 1 -->
+                    <div class="carousel-slide active">
+
+                        <h3>UTEP</h3>
+
+                        <h4>
+                            <strong>Yhali Acosta</strong>
+                        </h4>
+
+                        <p>
+                            <strong>Special Events Intern</strong>
+                        </p>
+
+                        <p>
+                            <strong>06/27/26 - 02/28/27</strong>
+                        </p>
+
+                        <p>
+                            El Paso, Texas
+                        </p>
+
+                        <p>
+                            During my internship, I assist with event setup and operations,
+                            coordinate event logistics, support guests, and help prepare
+                            event and marketing materials. My favorite part is being
+                            involved in the events and seeing everything come together
+                            while creating a positive experience for guests.
+                        </p>
+
+                        <div class="carousel-counter">
+                            1 of 3
+                        </div>
+
+                    </div>
+
+
+                    <!-- Person 2 -->
+                    <div class="carousel-slide">
+
+                        <h3>UTEP</h3>
+
+                        <h4>
+                            <strong>Evelyn Matthei</strong>
+                        </h4>
+
+                        <p>
+                            <strong>Leadership Studies Intern</strong>
+                        </p>
+
+                        <p>
+                            <strong>11/02/25 - 08/10/26</strong>
+                        </p>
+
+                        <p>
+                            El Paso, Texas
+                        </p>
+
+                        <p>
+                            During my Leadership internship, I helped organize events, create promotional materials, and connect students with leadership opportunities. My favorite part was using my creativity to develop programs that encouraged students to become more involved on campus. 
+                        </p>
+
+                        <div class="carousel-counter">
+                            2 of 3
+                        </div>
+
+                    </div>
+
+                    <!-- Person 3 -->
+                    <div class="carousel-slide">
+
+                        <h3>UTEP</h3>
+
+                        <h4>
+                            <strong>Evelyn Matthei</strong>
+                        </h4>
+
+                        <p>
+                            <strong>UTEP CS Summer Camp Instructor</strong>
+                        </p>
+
+                        <p>
+                            <strong>06/01/26 - 07/31/26</strong>
+                        </p>
+
+                        <p>
+                            El Paso, Texas
+                        </p>
+
+                        <p>
+                            During the camp, I taught students about AI, cybersecurity, Python, and technology through hands-on activities. My favorite part was seeing their confidence and excitement grow as they learned something new. 
+                        </p>
+
+                        <div class="carousel-counter">
+                            3 of 3
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button class="carousel-btn next-btn">&#10095;</button>
+
+            </div>
+        `, {
+                maxWidth: 350,
+                minWidth: 320,
+                autoPan: true,
+                autoPanPadding: [50, 50],
+                closeOnClick: false
+            });
+            
+// =================================================
+// UTEP CAROUSEL FUNCTIONALITY
+// =================================================
+
+let currentUtepSlide = 0;
+let utepCloseTimer;
+
+
+// Open popup when hovering over UTEP marker
+utepMarker.on("mouseover", function () {
+
+    clearTimeout(utepCloseTimer);
+    utepMarker.openPopup();
+
+});
+
+
+// Give user time to move from marker to popup
+utepMarker.on("mouseout", function () {
+
+    clearTimeout(utepCloseTimer);
+
+    utepCloseTimer = setTimeout(function () {
+        utepMarker.closePopup();
+    }, 1200);
+
+});
+
+
+utepMarker.on("popupopen", function () {
+
+    const popupElement = utepMarker.getPopup().getElement();
+
+    if (!popupElement) {
+        return;
+    }
+
+    // Prevent interactions with carousel from reaching the map
+    L.DomEvent.disableClickPropagation(popupElement);
+    L.DomEvent.disableScrollPropagation(popupElement);
+
+
+    // Keep popup open when mouse enters it
+    popupElement.onmouseenter = function () {
+        clearTimeout(utepCloseTimer);
+    };
+
+
+    // ALSO keep it open as soon as user presses inside popup
+    popupElement.onmousedown = function () {
+        clearTimeout(utepCloseTimer);
+    };
+
+
+    // Close after actually leaving the popup
+    popupElement.onmouseleave = function () {
+
+        clearTimeout(utepCloseTimer);
+
+        utepCloseTimer = setTimeout(function () {
+            utepMarker.closePopup();
+        }, 800);
+    };
+
+
+    const slides =
+        popupElement.querySelectorAll(".carousel-slide");
+
+    const nextButton =
+        popupElement.querySelector(".next-btn");
+
+    const prevButton =
+    popupElement.querySelector(".prev-btn");
+
+
+    function showSlide(index) {
+
+        slides.forEach(function (slide) {
+            slide.classList.remove("active");
+        });
+
+        slides[index].classList.add("active");
+    }
+
+
+    // NEXT
+    nextButton.onmousedown = function (event) {
+        event.stopPropagation();
+        clearTimeout(utepCloseTimer);
+    };
+
+    nextButton.onclick = function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        clearTimeout(utepCloseTimer);
+
+        currentUtepSlide =
+            (currentUtepSlide + 1) % slides.length;
+
+        showSlide(currentUtepSlide);
+    };
+
+
+    // PREVIOUS
+    prevButton.onmousedown = function (event) {
+        event.stopPropagation();
+        clearTimeout(utepCloseTimer);
+    };
+
+    prevButton.onclick = function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        clearTimeout(utepCloseTimer);
+
+        currentUtepSlide--;
+
+        if (currentUtepSlide < 0) {
+            currentUtepSlide = slides.length - 1;
+        }
+
+        showSlide(currentUtepSlide);
+    };
+
+
+    showSlide(currentUtepSlide);
+});
 
         // =================================================
         // CLICK REGION TO ZOOM IN
@@ -514,22 +966,23 @@
 
             map.removeLayer(elPasoRegion);
 
-            utepRegion.addTo(map);
+            // utepRegion.addTo(map);
             whiteSandsMarker.addTo(map);
+            utepMarker.addTo(map);
 
         });
 
-        utepRegion.on("click", function () {
+        // utepRegion.on("click", function () {
 
-            map.flyTo(
-                [31.7700, -106.5048],
-                11
-            );
+        //     map.flyTo(
+        //         [31.7700, -106.5048],
+        //         11
+        //     );
 
-            map.removeLayer(utepRegion);
+        //     map.removeLayer(utepRegion);
 
-            // whiteSandsMarker.addTo(map);
-        });
+        //     // whiteSandsMarker.addTo(map);
+        // });
 
 
 
@@ -582,10 +1035,14 @@
                     map.removeLayer(princetonMarker);
                 }
 
-                // Hide UTEP
-                if (map.hasLayer(utepRegion)) {
-                    map.removeLayer(utepRegion);
+                if (map.hasLayer(utepMarker)) {
+                    map.removeLayer(utepMarker);
                 }
+
+                // // Hide UTEP
+                // if (map.hasLayer(utepRegion)) {
+                //     map.removeLayer(utepRegion);
+                // }
                 
 
 
@@ -604,27 +1061,19 @@
                 if (!map.hasLayer(northeastRegion)) {
                     northeastRegion.addTo(map);
                 }
-
-            }else if (zoom >= 6 && zoom <= 9) {
-
-                // Hide general El Paso marker
-                if (map.hasLayer(elPasoRegion)) {
-                    map.removeLayer(elPasoRegion);
-                }
-
-                // Show UTEP region
-                if (!map.hasLayer(utepRegion)) {
-                    utepRegion.addTo(map);
-                }
-            }else if (zoom >= 10) {
-
-                // Hide UTEP region marker
-                if (map.hasLayer(utepRegion)) {
-                    map.removeLayer(utepRegion);
-                }
-
-                // Individual UTEP-area internships would be shown here
             }
+            // else if (zoom >= 6 && zoom <= 9) {
+
+            //     // Hide general El Paso marker
+            //     if (map.hasLayer(elPasoRegion)) {
+            //         map.removeLayer(elPasoRegion);
+            //     }
+
+            //     // // Show UTEP region
+            //     // if (!map.hasLayer(utepRegion)) {
+            //     //     utepRegion.addTo(map);
+            //     // }
+            // }
 
         });
 

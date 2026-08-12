@@ -898,3 +898,57 @@ h1{
     margin: 5px 0;
     font-size: 12px;
 }
+
+/* UTEP Carousel */
+
+.carousel {
+    display: flex;
+    align-items: center;
+    width: 320px;
+    max-width: 320px;
+}
+
+.carousel-content {
+    width: 100%;
+    overflow: hidden;
+}
+
+.carousel-slide {
+    display: none;
+    width: 100%;
+}
+
+.carousel-slide.active {
+    display: block;
+}
+
+.carousel-btn {
+    position: absolute;
+    bottom: 5px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0.4;
+    z-index: 1000;
+    pointer-events: auto;
+}
+
+.prev-btn {
+    left: 5px;
+}
+
+.next-btn {
+    right: 5px;
+}
+
+.carousel-btn:hover {
+    opacity: 0.2;
+}
+
+.carousel-counter {
+    text-align: center;
+    font-size: 11px;
+    color: #777;
+    margin-top: 10px;
+}
