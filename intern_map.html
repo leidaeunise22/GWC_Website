@@ -1,0 +1,635 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Girls Who Code UTEP</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,600,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+
+<!-- Leaflet CSS -->
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+</head>
+
+<body>
+
+    <section class="sub-header">
+        <nav>
+            <a href="index.html"><img src="images/logo.png"></a>
+
+            <div class="nav-links" id="navLinks">
+                <i class="fa fa-close" onclick="hideMenu()"></i>
+
+                <ul>
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="about.html">ABOUT</a></li>
+                    <li><a href="officers.html">OFFICERS</a></li>
+                    <li><a href="getinvolved.html">GET INVOLVED</a></li>
+                    <li><a href="workshops.html">WORKSHOPS</a></li>
+                    <li><a href="intern_map.html">INTERNSHIP MAP</a></li>
+                    <li><a href="calendar.html">CALENDAR</a></li>
+                    <li><a href="contact.html">CONTACT</a></li>
+                </ul>
+            </div>
+
+            <i class="fa fa-bars" onclick="showMenu()"></i>
+        </nav>
+
+        <h1>GWC Internship Map</h1>
+    </section>
+
+
+    <!-- Internship Map -->
+
+    <section class="internship-map">
+
+        <div class="map-intro">
+            <h2>Where Our Officers Have Interned</h2>
+
+            <p>
+                Explore internship experiences from Girls Who Code UTEP officers.
+                Hover over a location to learn more.
+            </p>
+        </div>
+
+        <div id="map"></div>
+
+    </section>
+
+
+    <!-------- footer ---------->
+
+    <section class="footer">
+
+        <h4>About Us</h4>
+
+        <p>
+            &copy; 2026 Girls Who Code UTEP Chapter.
+            Made with passion and teamwork.
+        </p>
+
+        <div class="icons">
+
+            <a href="https://www.facebook.com/GirlsWhoCode" target="_blank">
+                <i class="fa fa-facebook"></i>
+            </a>
+
+            <a href="https://x.com/girlswhocode" target="_blank">
+                <i class="fa fa-twitter"></i>
+            </a>
+
+            <a href="https://www.instagram.com/gwcutep/" target="_blank">
+                <i class="fa fa-instagram"></i>
+            </a>
+
+            <a href="https://www.linkedin.com/company/girls-who-code-utep/posts/?feedView=all" target="_blank">
+                <i class="fa fa-linkedin"></i>
+            </a>
+
+            <a href="https://teams.microsoft.com/v2/" target="_blank">
+                <i class="fa fa-users"></i>
+            </a>
+
+            <a href="https://minetracker.utep.edu/organization/girlswhocodeutep" target="_blank">
+                <i class="fa fa-star"></i>
+            </a>
+
+        </div>
+
+        <a class="footer-link">
+            <p>
+                made with <i class="fa fa-heart-o"></i> by GWC
+            </p>
+        </a>
+
+    </section>
+
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+
+        // -------------------------------------------------
+        // CREATE MAP - start zoomed out over the United States
+        // -------------------------------------------------
+
+        const map = L.map("map").setView(
+            [39.5, -98.35],
+            4
+        );
+
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                attribution: "&copy; OpenStreetMap contributors"
+            }
+        ).addTo(map);
+
+
+
+        // =================================================
+        // REGION MARKERS
+        // =================================================
+
+        const washingtonRegion = L.marker(
+            [47.4, -120.7]
+        ).addTo(map);
+
+        washingtonRegion.bindPopup(`
+            <div class="internship-popup">
+                <h3>Washington</h3>
+                <p>Amazon, Blue Origin, and Microsoft</p>
+                <p>Click to explore internships in this area.</p>
+            </div>
+        `);
+
+
+        const elPasoRegion = L.marker(
+            [32.1, -106.5]
+        ).addTo(map);
+
+        elPasoRegion.bindPopup(`
+            <div class="internship-popup">
+                <h3>El Paso / Southern New Mexico</h3>
+                <p>White Sands Missile Range</p>
+                <p>Click to explore internships in this area.</p>
+            </div>
+        `);
+
+        const utepRegion = L.marker(
+            [31.7700, -106.5048]
+        );
+
+        utepRegion.bindPopup(`
+            <div class="internship-popup">
+                <h3>UTEP</h3>
+                // <p>White Sands Missile Range</p>
+                <p>Click to explore internships in this area.</p>
+            </div>
+        `);
+
+
+        const northeastRegion = L.marker(
+            [40.5, -74.3]
+        ).addTo(map);
+
+        northeastRegion.bindPopup(`
+            <div class="internship-popup">
+                <h3>New Jersey / New York</h3>
+                <p>Princeton and surrounding internship locations</p>
+                <p>Click to explore internships in this area.</p>
+            </div>
+        `);
+
+
+
+        // =================================================
+        // WHITE SANDS MISSILE RANGE
+        // =================================================
+
+        const whiteSandsIcon = L.icon({
+            iconUrl: "images/wsmr.png",
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        const whiteSandsMarker = L.marker(
+            [32.38, -106.48],
+            { icon: whiteSandsIcon }
+        );
+
+        whiteSandsMarker.bindPopup(`
+            <div class="internship-popup">
+
+                <h3>White Sands Missile Range</h3>
+
+                <h4>
+                    <strong>Cosette Ruiz</strong>
+                </h4>
+
+                <p>
+                    <strong>Cyber Analysis Intern</strong>
+                </p>
+
+                <p>
+                    <strong>06/01/26 - 08/20/26</strong>
+                </p>
+
+                <p>
+                    White Sands Missile Range, New Mexico
+                </p>
+
+                <p>
+                    During my internship at White Sands Missile Range (WSMR),
+                    I worked on cybersecurity projects involving software
+                    development, network security, and wireless security research
+                    alongside engineers and analysts. My favorite part of the
+                    internship was having the opportunity to lead my own project,
+                    which allowed me to take ownership of its development,
+                    testing, and overall direction.
+                </p>
+
+            </div>
+        `);
+
+        whiteSandsMarker.on("mouseover", function () {
+            this.openPopup();
+        });
+
+        whiteSandsMarker.on("mouseout", function () {
+            this.closePopup();
+        });
+
+
+
+        // =================================================
+        // MICROSOFT
+        // =================================================
+
+        const microsoftIcon = L.icon({
+            iconUrl: "images/microsoft.png",
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        const microsoftMarker = L.marker(
+            [47.6740, -122.1215],
+            { icon: microsoftIcon }
+        );
+
+        microsoftMarker.bindPopup(`
+            <div class="internship-popup">
+
+                <h3>Microsoft</h3>
+
+                <h4>
+                    <strong>Vianey Martinez</strong>
+                </h4>
+
+                <p>
+                    <strong>
+                        Explore Intern (Summer 2025) /
+                        Software Engineer Intern (Summer 2026)
+                    </strong>
+                </p>
+
+                <p>
+                    <strong>05/26/26 - 08/14/26</strong>
+                </p>
+
+                <p>
+                    Redmond/Seattle, Washington
+                </p>
+
+                <p>
+                    During my internship at Microsoft, I worked on an AI-based
+                    onboarding solution that helps Azure Resource Providers assess
+                    their Soft Delete readiness through automated analysis and
+                    reporting, and my favorite part was learning how AI is evolving
+                    and changing software development and engineering workflows
+                    while networking with professionals across the company and
+                    learning from their experiences.
+                </p>
+
+            </div>
+        `);
+
+        microsoftMarker.on("mouseover", function () {
+            this.openPopup();
+        });
+
+        microsoftMarker.on("mouseout", function () {
+            this.closePopup();
+        });
+
+
+
+        // =================================================
+        // AMAZON
+        // =================================================
+
+        const amazonIcon = L.icon({
+            iconUrl: "images/amazon.png",
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        const amazonMarker = L.marker(
+            [47.6101, -122.2015],
+            { icon: amazonIcon }
+        );
+
+        amazonMarker.bindPopup(`
+            <div class="internship-popup">
+
+                <h3>Amazon</h3>
+
+                <h4>
+                    <strong>Anel Gaytan</strong>
+                </h4>
+
+                <p>
+                    <strong>Software Development Engineer Intern</strong>
+                </p>
+
+                <p>
+                    <strong>6/1/2026 - 08/21/26</strong>
+                </p>
+
+                <p>
+                    Bellevue, WA
+                </p>
+
+                <p>
+                    I worked on the frontend and backend of internal servers to
+                    migrate a modification feature into a newer UI for operators.
+                    I had to work with 3 different code packages, communicate
+                    effectively with different teams on approaches, and get my
+                    code reviewed and approved before it was processed into
+                    production for customers to use.
+                </p>
+
+            </div>
+        `);
+
+        amazonMarker.on("mouseover", function () {
+            this.openPopup();
+        });
+
+        amazonMarker.on("mouseout", function () {
+            this.closePopup();
+        });
+
+
+
+        // =================================================
+        // BLUE ORIGIN
+        // =================================================
+
+        const blueOriginIcon = L.icon({
+            iconUrl: "images/blueorigin.png",
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        const blueOriginMarker = L.marker(
+            [47.3809, -122.2348],
+            { icon: blueOriginIcon }
+        );
+
+        blueOriginMarker.bindPopup(`
+            <div class="internship-popup">
+
+                <h3>Blue Origin</h3>
+
+                <h4>
+                    <strong>Caelyn Campos</strong>
+                </h4>
+
+                <p>
+                    <strong>Aerospace Software Engineer Intern</strong>
+                </p>
+
+                <p>
+                    <strong>6/1/2026 - 08/21/26</strong>
+                </p>
+
+                <p>
+                    Kent, WA
+                </p>
+
+                <p>
+                    I was part of the data science and machine learning team
+                    for the supply chain. My favorite part was the opportunity
+                    to talk to people from different backgrounds since aerospace
+                    is such a broad field.
+                </p>
+
+            </div>
+        `);
+
+        blueOriginMarker.on("mouseover", function () {
+            this.openPopup();
+        });
+
+        blueOriginMarker.on("mouseout", function () {
+            this.closePopup();
+        });
+
+
+
+        // =================================================
+        // PRINCETON
+        // =================================================
+
+        const princetonIcon = L.icon({
+            iconUrl: "images/princeton.png",
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        const princetonMarker = L.marker(
+            [40.3573, -74.6672],
+            { icon: princetonIcon }
+        );
+
+        princetonMarker.bindPopup(`
+            <div class="internship-popup">
+
+                <h3>Princeton Neuroscience Institute</h3>
+
+                <h4>
+                    <strong>Fernanda Del Toro</strong>
+                </h4>
+
+                <p>
+                    <strong>Machine Learning Research Intern</strong>
+                </p>
+
+                <p>
+                    <strong>6/1/2025 - 08/1/25</strong>
+                </p>
+
+                <p>
+                    Princeton, New Jersey
+                </p>
+
+                <p>
+                    Created a machine learning model to translate fMRI data into
+                    descriptive text, with the goal of helping people with
+                    disabilities communicate using only their thoughts.
+                </p>
+
+            </div>
+        `);
+
+        princetonMarker.on("mouseover", function () {
+            this.openPopup();
+        });
+
+        princetonMarker.on("mouseout", function () {
+            this.closePopup();
+        });
+
+
+
+        // =================================================
+        // CLICK REGION TO ZOOM IN
+        // =================================================
+
+        washingtonRegion.on("click", function () {
+
+            map.flyTo(
+                [47.5, -122.2],
+                9
+            );
+
+            map.removeLayer(washingtonRegion);
+
+            microsoftMarker.addTo(map);
+            amazonMarker.addTo(map);
+            blueOriginMarker.addTo(map);
+        });
+
+
+        elPasoRegion.on("click", function () {
+
+            map.flyTo(
+                [32.2, -106.5],
+                8
+            );
+
+            map.removeLayer(elPasoRegion);
+
+            utepRegion.addTo(map);
+            whiteSandsMarker.addTo(map);
+
+        });
+
+        utepRegion.on("click", function () {
+
+            map.flyTo(
+                [31.7700, -106.5048],
+                11
+            );
+
+            map.removeLayer(utepRegion);
+
+            // whiteSandsMarker.addTo(map);
+        });
+
+
+
+        northeastRegion.on("click", function () {
+
+            map.flyTo(
+                [40.45, -74.3],
+                8
+            );
+
+            map.removeLayer(northeastRegion);
+
+            princetonMarker.addTo(map);
+        });
+
+
+
+        // =================================================
+        // WHEN USER ZOOMS BACK OUT,
+        // RESTORE REGION MARKERS AND HIDE COMPANY LOGOS
+        // =================================================
+
+        map.on("zoomend", function () {
+
+            const zoom = map.getZoom();
+
+            if (zoom <= 5) {
+
+                // -----------------------------
+                // Hide individual internships
+                // -----------------------------
+
+                if (map.hasLayer(microsoftMarker)) {
+                    map.removeLayer(microsoftMarker);
+                }
+
+                if (map.hasLayer(amazonMarker)) {
+                    map.removeLayer(amazonMarker);
+                }
+
+                if (map.hasLayer(blueOriginMarker)) {
+                    map.removeLayer(blueOriginMarker);
+                }
+
+                if (map.hasLayer(whiteSandsMarker)) {
+                    map.removeLayer(whiteSandsMarker);
+                }
+
+                if (map.hasLayer(princetonMarker)) {
+                    map.removeLayer(princetonMarker);
+                }
+
+                // Hide UTEP
+                if (map.hasLayer(utepRegion)) {
+                    map.removeLayer(utepRegion);
+                }
+                
+
+
+                // -----------------------------
+                // Restore regional markers
+                // -----------------------------
+
+                if (!map.hasLayer(washingtonRegion)) {
+                    washingtonRegion.addTo(map);
+                }
+
+                if (!map.hasLayer(elPasoRegion)) {
+                    elPasoRegion.addTo(map);
+                }
+
+                if (!map.hasLayer(northeastRegion)) {
+                    northeastRegion.addTo(map);
+                }
+
+            }else if (zoom >= 6 && zoom <= 9) {
+
+                // Hide general El Paso marker
+                if (map.hasLayer(elPasoRegion)) {
+                    map.removeLayer(elPasoRegion);
+                }
+
+                // Show UTEP region
+                if (!map.hasLayer(utepRegion)) {
+                    utepRegion.addTo(map);
+                }
+            }else if (zoom >= 10) {
+
+                // Hide UTEP region marker
+                if (map.hasLayer(utepRegion)) {
+                    map.removeLayer(utepRegion);
+                }
+
+                // Individual UTEP-area internships would be shown here
+            }
+
+        });
+
+    </script>
+
+
+</body>
+</html>
