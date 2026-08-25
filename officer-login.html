@@ -7,129 +7,6 @@
 <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,600,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="icon" href="images/logo.png" type="image/x-icon">
-
-<style>
-  /* Hide everything until Firebase is ready */
-  body { background: #fff; }
-
-  #loadingScreen {
-    position: fixed;
-    inset: 0;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #e0f2f1;
-    border-top-color: #009688;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  #pageContent { display: none; }
-
-  .login-wrapper {
-    min-height: 80vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 20px;
-  }
-
-  .login-box {
-    background: #f9f9f9;
-    border-radius: 12px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.1);
-    padding: 48px 40px;
-    width: 100%;
-    max-width: 440px;
-    text-align: center;
-  }
-
-  .login-box img {
-    width: 80px;
-    margin-bottom: 16px;
-  }
-
-  .login-box h2 {
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #333;
-  }
-
-  .login-box p {
-    font-size: 13px;
-    color: #777;
-    margin-bottom: 28px;
-  }
-
-  .login-box label {
-    display: block;
-    text-align: left;
-    font-size: 12px;
-    font-weight: 600;
-    color: #444;
-    margin-bottom: 6px;
-    margin-top: 16px;
-  }
-
-  .login-box input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    outline: none;
-    box-sizing: border-box;
-    transition: border 0.3s;
-  }
-
-  .login-box input:focus { border-color: #009688; }
-
-  .login-btn {
-    width: 100%;
-    margin-top: 28px;
-    padding: 14px;
-    background: #009688;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  .login-btn:hover    { background: #00796B; }
-  .login-btn:disabled { background: #aaa; cursor: not-allowed; }
-
-  #loginMessage {
-    margin-top: 16px;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    display: none;
-  }
-  #loginMessage.error {
-    background: #fce4ec;
-    color: #b71c1c;
-    border: 1px solid #f48fb1;
-    display: block;
-  }
-
-  @media (max-width: 480px) {
-    .login-box { padding: 32px 20px; }
-  }
-</style>
 </head>
 <body>
 
@@ -151,6 +28,7 @@
           <li><a href="officers.html">OFFICERS</a></li>
           <li><a href="getinvolved.html">GET INVOLVED</a></li>
           <li><a href="workshops.html">WORKSHOPS</a></li>
+          <li><a href="points.html">ATTENDANCE</a></li>
           <li><a href="calendar.html">CALENDAR</a></li>
           <li><a href="contact.html">CONTACT</a></li>
         </ul>
@@ -161,7 +39,7 @@
   </section>
 
   <div class="login-wrapper">
-    <div class="login-box">
+    <div class="login-box" id="loginBox">
       <img src="images/logo.png" alt="GWC Logo">
       <h2>Officer Login</h2>
       <p>Sign in with your UTEP email to access the dashboard.</p>
@@ -174,6 +52,34 @@
 
       <button class="login-btn" id="loginBtn">Sign In</button>
       <div id="loginMessage"></div>
+
+      <button type="button" class="auth-switch-link" id="showSignupBtn">New officer? Create account</button>
+    </div>
+
+    <div class="login-box" id="signupBox" style="display:none;">
+      <img src="images/logo.png" alt="GWC Logo">
+      <h2>Create Officer Account</h2>
+      <p>You'll need the officer signup code — ask a current officer if you don't have it.</p>
+
+      <label for="signupName">Full Name</label>
+      <input type="text" id="signupName" placeholder="e.g. Maria Garcia">
+
+      <label for="signupRole">Officer Role</label>
+      <input type="text" id="signupRole" placeholder="e.g. Secretary, Events Officer">
+
+      <label for="signupEmail">UTEP Email</label>
+      <input type="email" id="signupEmail" placeholder="you@miners.utep.edu">
+
+      <label for="signupPassword">Password</label>
+      <input type="password" id="signupPassword" placeholder="Create a password (min 6 characters)">
+
+      <label for="signupCode">Signup Code</label>
+      <input type="text" id="signupCode" placeholder="Enter the officer signup code">
+
+      <button class="login-btn" id="signupBtn">Create Account</button>
+      <div id="signupMessage"></div>
+
+      <button type="button" class="auth-switch-link" id="showLoginBtn">Already have an account? Sign in</button>
     </div>
   </div>
 
@@ -199,27 +105,28 @@
 </script>
 
 <script type="module">
-  import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword }
+  import { app } from "./firebase-config.js";
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, Timestamp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAHTRf40x8Z6gfSM-2yQOn825IRsEV3sfg",
-    authDomain: "gwc-tracker-84577.firebaseapp.com",
-    projectId: "gwc-tracker-84577",
-    storageBucket: "gwc-tracker-84577.firebasestorage.app",
-    messagingSenderId: "250632343424",
-    appId: "1:250632343424:web:e977f8bc2c2f581c3f7b65",
-    measurementId: "G-DVK995JRFJ"
-  };
-
-  const app  = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  async function sha256(message) {
+    const msgBuffer  = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+    const hashArray  = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  let justSignedUp = false; // true while handleSignup() is showing its own confirmation before redirecting
 
   // Wait for Firebase to resolve auth state ONCE before showing anything
   onAuthStateChanged(auth, (user) => {
     if (user) {
+      if (justSignedUp) return; // handleSignup() controls the redirect in this case
       // Already logged in — go to dashboard (no flicker, loading screen covers it)
       window.location.replace("officer-dashboard.html");
     } else {
@@ -227,6 +134,16 @@
       document.getElementById("loadingScreen").style.display = "none";
       document.getElementById("pageContent").style.display = "block";
     }
+  });
+
+  // ── Sign In / Create Account toggle ───────────────────────
+  document.getElementById("showSignupBtn").addEventListener("click", () => {
+    document.getElementById("loginBox").style.display  = "none";
+    document.getElementById("signupBox").style.display = "block";
+  });
+  document.getElementById("showLoginBtn").addEventListener("click", () => {
+    document.getElementById("signupBox").style.display = "none";
+    document.getElementById("loginBox").style.display  = "block";
   });
 
   // Sign in
@@ -270,6 +187,78 @@
       msg.className = "error";
       btn.disabled = false;
       btn.textContent = "Sign In";
+    }
+  }
+
+  // ── Create Account ─────────────────────────────────────────
+  document.getElementById("signupBtn").addEventListener("click", handleSignup);
+
+  async function handleSignup() {
+    const btn = document.getElementById("signupBtn");
+    const msg = document.getElementById("signupMessage");
+    msg.className = "";
+    msg.style.display = "none";
+
+    const fullName = document.getElementById("signupName").value.trim();
+    const role     = document.getElementById("signupRole").value.trim();
+    const email    = document.getElementById("signupEmail").value.trim().toLowerCase();
+    const password = document.getElementById("signupPassword").value;
+    const code     = document.getElementById("signupCode").value.trim();
+
+    if (!fullName) { showSignupError("Please enter your full name."); return; }
+    if (!role)     { showSignupError("Please enter your officer role."); return; }
+    if (!email.endsWith("@miners.utep.edu") && !email.endsWith("@utep.edu")) {
+      showSignupError("Please use your UTEP email (@miners.utep.edu or @utep.edu)."); return;
+    }
+    if (password.length < 6) { showSignupError("Password must be at least 6 characters."); return; }
+    if (!code) { showSignupError("Please enter the officer signup code."); return; }
+
+    function showSignupError(text) {
+      msg.textContent = text;
+      msg.className = "error";
+      btn.disabled = false;
+      btn.textContent = "Create Account";
+    }
+
+    try {
+      btn.disabled = true;
+      btn.textContent = "Verifying code…";
+
+      const codeDoc = await getDoc(doc(db, "config", "officerSignup"));
+      if (!codeDoc.exists() || !codeDoc.data().codeHash) {
+        showSignupError("Officer signup isn't set up yet. Ask an existing officer to set a signup code from the dashboard.");
+        return;
+      }
+
+      const enteredHash = await sha256(code);
+      if (enteredHash !== codeDoc.data().codeHash) {
+        showSignupError("Incorrect signup code. Ask a current officer for the code.");
+        return;
+      }
+
+      btn.textContent = "Creating account…";
+      justSignedUp = true;
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(cred.user, { displayName: fullName });
+
+      await setDoc(doc(db, "officers", cred.user.uid), {
+        fullName,
+        role,
+        email,
+        createdAt: Timestamp.now()
+      });
+
+      msg.textContent = `Account created! Redirecting you to the dashboard…`;
+      msg.className = "success";
+      btn.textContent = "Success!";
+      setTimeout(() => window.location.replace("officer-dashboard.html"), 1500);
+    } catch (err) {
+      justSignedUp = false;
+      let errorMsg = "Something went wrong creating your account.";
+      if (err.code === "auth/email-already-in-use") errorMsg = "An account with that email already exists. Try signing in instead.";
+      else if (err.code === "auth/invalid-email")    errorMsg = "That doesn't look like a valid email.";
+      else if (err.code === "auth/weak-password")    errorMsg = "Password must be at least 6 characters.";
+      showSignupError(errorMsg);
     }
   }
 </script>

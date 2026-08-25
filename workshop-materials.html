@@ -1,18 +1,18 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Girls Who Code UTEP</title>
+<title>Girls Who Code UTEP – Workshop Materials</title>
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,600,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="icon" href = "images/logo.png"type="image/x-icon"> 
+<link rel="icon" href="images/logo.png" type="image/x-icon">
 </head>
 <body>
     <section class="sub-header">
 
         <nav>
             <a href="index.html"><img src="images/logo.png"></a>
-            <div class="nav-links" id="navLinks">  
+            <div class="nav-links" id="navLinks">
                 <i class="fa fa-close" onclick="hideMenu()"></i>
                 <ul>
                     <li><a href="index.html">HOME</a></li>
@@ -26,27 +26,27 @@
                 </ul>
             </div>
             <i class="fa fa-bars" onclick="showMenu()"></i>
-        </nav>  
+        </nav>
 
-            <h1>Workshops</h1>
+            <h1 id="workshopTitle">Workshop Materials</h1>
     </section>
-    
-    
-<!------- Semester project workshop content -------->
-    
+
+
+<!------- materials content -------->
+
 <section class="workshops">
 
-    <div class="workshops-col">
-        <h1>Semester Project Resources</h1>
-        <p>New resources are on the way — check back soon!</p>
+    <div id="materialsList">
+      <div class="empty-state">Loading…</div>
     </div>
 
-    <a href="workshops.html" target="_blank" class="hero-btn teal-btn back-btn">
+    <a href="workshops.html" class="hero-btn teal-btn back-btn">
         Back to Workshops
     </a>
 
 </section>
-    
+
+
 <!-------- footer ---------->
 
 <section class="footer">
@@ -59,13 +59,13 @@
             <a href="https://www.linkedin.com/company/girls-who-code-utep/posts/?feedView=all" target = "_blank"><i class="fa fa-linkedin"></i></a>
             <a href = "https://teams.microsoft.com/v2/" target = "_blank"><i class="fa fa-users"></i></a>
             <a href = "https://minetracker.utep.edu/organization/girlswhocodeutep" target = "_blank"><i class="fa fa-star"></i></a>
-            
+
         </div>
         <a class="footer-link"><p>made with <i class="fa fa-heart-o"></i> by GWC</p></a>
         <a class="officer-link" href="officer-login.html">Officer Login</a>
-</section>   
-  
-  
+</section>
+
+
 <!----JavaScript for toggle menu---->
 <script>
     var navLinks = document.getElementById("navLinks");
@@ -77,7 +77,66 @@
     function hideMenu() {
         navLinks.style.right = "-200px";
     }
-</script> 
-    
+</script>
+
+<!-- Load this workshop's materials -->
+<script type="module">
+  import { app } from "./firebase-config.js";
+  import { getFirestore, doc, getDoc }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const db = getFirestore(app);
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  function isSafeUrl(url) {
+    return typeof url === "string" && /^https?:\/\//i.test(url);
+  }
+
+  async function loadMaterials() {
+    const list = document.getElementById("materialsList");
+    const params = new URLSearchParams(window.location.search);
+    const workshopId = params.get("id");
+
+    if (!workshopId) {
+      list.innerHTML = "<div class='empty-state'>No workshop selected.</div>";
+      return;
+    }
+
+    try {
+      const snap = await getDoc(doc(db, "workshops", workshopId));
+      if (!snap.exists()) {
+        list.innerHTML = "<div class='empty-state'>Workshop not found.</div>";
+        return;
+      }
+
+      const w = snap.data();
+      document.getElementById("workshopTitle").textContent = w.name;
+
+      const materials = (Array.isArray(w.materials) ? w.materials : []).filter(m => isSafeUrl(m.url));
+
+      if (!materials.length) {
+        list.innerHTML = "<div class='empty-state'>No materials uploaded yet.</div>";
+        return;
+      }
+
+      list.innerHTML = materials.map(m => `
+        <div class="workshop">
+          <h2>${escapeHtml(m.label)}</h2>
+          <a class="teal-btn" href="${m.url}" target="_blank" rel="noopener">${m.type === "pdf" ? "Download" : "View"}</a>
+        </div>`).join("");
+    } catch (err) {
+      console.error("Load materials error:", err);
+      list.innerHTML = "<div class='empty-state'>Couldn't load materials right now. Please try again later.</div>";
+    }
+  }
+
+  loadMaterials();
+</script>
+
 </body>
-</html>    
+</html>

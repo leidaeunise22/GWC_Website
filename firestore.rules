@@ -1,0 +1,74 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Webmaster/President/VP get extra powers: deleting submissions and
+    // adding new activity categories (officer-dashboard.html). Matched
+    // case-insensitively against the free-text "role" field on their
+    // officer profile.
+    function isPrivilegedOfficer() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/officers/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/officers/$(request.auth.uid)).data.role.lower()
+          in ['webmaster', 'president', 'vice president'];
+    }
+
+    // Workshops: anyone can view the list (points.html dropdown, workshops.html),
+    // only signed-in officers can create/edit/delete them (officer-dashboard.html).
+    match /workshops/{workshopId} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // Activity categories: officer-dashboard.html reads these (signed in) to
+    // populate the "Category" dropdown. Only Webmaster/President/VP can add
+    // new ones ("+ Add Category").
+    match /categories/{categoryId} {
+      allow read: if isSignedIn();
+      allow create: if isPrivilegedOfficer();
+      allow update, delete: if false;
+    }
+
+    // Active attendance codes: anyone can read one to validate a code
+    // (points.html), only signed-in officers can generate/overwrite them
+    // (officer-dashboard.html "Generate Code").
+    match /activeCodes/{workshopId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // Attendance submissions: points.html has no login, so anyone can create
+    // one and query for their own duplicate before submitting. Officers read
+    // the full list from the dashboard. Only Webmaster/President/VP can
+    // delete a submission (officer-dashboard.html Submissions tab); nothing
+    // ever edits one.
+    match /attendance/{attendanceId} {
+      allow read, create: if true;
+      allow update: if false;
+      allow delete: if isPrivilegedOfficer();
+    }
+
+    // Officer signup code: officer-login.html's signup form reads this
+    // (logged out) to check the code before creating an account. Only a
+    // signed-in officer can set/rotate it (officer-dashboard.html "Generate
+    // Code" tab, "Officer Signup Code" card).
+    match /config/officerSignup {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // Officer profiles: created by officer-login.html's signup flow right
+    // after the account is made. A new officer can only write their own
+    // profile doc (uid must match their own auth ID). Any signed-in officer
+    // can read the roster.
+    match /officers/{uid} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isSignedIn() && request.auth.uid == uid;
+    }
+  }
+}

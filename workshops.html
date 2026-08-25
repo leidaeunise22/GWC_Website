@@ -1,5 +1,4 @@
 <html>
-<!-- Testing  Hello its caelyn :))) -->
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Girls Who Code UTEP</title>
@@ -14,13 +13,14 @@
         <nav>
             <a href="index.html"><img src="images/logo.png"></a>
             <div class="nav-links" id="navLinks">  
-                <i class="fa fa-close" oncl ick="hideMenu()"></i>
+                <i class="fa fa-close" onclick="hideMenu()"></i>
                 <ul>
                     <li><a href="index.html">HOME</a></li>
                     <li><a href="about.html">ABOUT</a></li>
                     <li><a href="officers.html">OFFICERS</a></li>
                     <li><a href="getinvolved.html">GET INVOLVED</a></li>
                     <li><a href="workshops.html">WORKSHOPS</a></li>
+          <li><a href="points.html">ATTENDANCE</a></li>
                     <li><a href="calendar.html">CALENDAR</a></li>
                     <li><a href="contact.html">CONTACT</a></li>
                 </ul>
@@ -36,198 +36,18 @@
     
 <section class="workshops">
 
-     
-
     <div class="workshops-col">
-        <h1>Girls Who Code Workshops</h1>     
-        <p>Select a workshop and enter the access code to view its materials.</p>
-    </div>
-    <!---->
-
-    <div class="workshop">
-        <h2>CSS Cascade</h2>
-        <!-- Hidden link that opens in new tab -->
-        <a id="cssLink"
-           href="SemesterProject25.html"
-           target="_blank"
-           style="display:none;"></a>
-
-        <button class="teal-btn" onclick="checkAccessHashed(
-            '10bc322601cf6af2ee202aaa61218ea4c59823c1016be592cf49ea80757b52e7',
-            'cssLink'
-        )">
-            Access Workshop
-        </button>
+        <h1>Girls Who Code Workshops</h1>
+        <p>Select a workshop and enter the password to view its materials.</p>
     </div>
 
-    <div class="workshop">
-        <h2>Gesture Recognition</h2>
-        <!-- Hidden link that opens in new tab -->
-        <a id="gestureLink"
-           href="SemesterProject25.html"
-           target="_blank"
-           style="display:none;"></a>
-
-        <button class="teal-btn" onclick="checkAccessHashed(
-            '6f5e77177c583bac7061f05a41e09f1abbb9997073f47173f41ac67d66af3722',
-            'gestureLink'
-        )">
-            Access Workshop
-        </button>
+    <div id="workshopList">
+      <div class="empty-state">Loading…</div>
     </div>
-
-    <div class="workshop">
-        <h2>Intro to Computer Vision</h2>
-
-        <!-- Hidden link that opens in new tab -->
-        <a id="compVisLink"
-           href="SemesterProject25.html"
-           target="_blank"
-           style="display:none;"></a>
-
-        <button class="teal-btn" onclick="checkAccessHashed(
-            'f99022a7444ef0660217c3de00296f9a0b5734d12c86998109da8f7dc2dab481',
-            'compVisLink'
-        )">
-            Access Workshop
-        </button>
-    </div>
-
-    <div class="workshop">
-        <h2>Electricity & Circuits</h2>
-
-        <!-- Hidden link that opens in new tab -->
-        <a id="ciruitsLink"
-           href="SemesterProject25.html"
-           target="_blank"
-           style="display:none;"></a>
-
-        <button class="teal-btn" onclick="checkAccessHashed(
-            '012ec93e89e00672598adc7d01e69493723ed1a3745f596bae1467c5611ce042',
-            'ciruitsLink'
-        )">
-            Access Workshop
-        </button>
-    </div>
-
-     <div class="workshop">
-        <h2>Public and Private Key Cryptology in Python</h2>
-
-        <!-- Hidden link that opens in new tab -->
-        <a id="cryptoLink"
-           href="SemesterProject25.html"
-           target="_blank"
-           style="display:none;"></a>
-
-        <button class="teal-btn" onclick="checkAccessHashed(
-            '82de894aea35b3a2df33da50897cb0de6072c7e7ba64264f553f23245fc2b277',
-            'cryptoLink'
-        )">
-            Access Workshop
-        </button>
-    </div>
-
-
-     <div class="workshop">
-        <h2>Resume Review with NLP Model</h2>
-
-        <!-- Hidden link that opens in new tab -->
-        <a id="resumeLink"
-           href="SemesterProject25.html"
-           target="_blank"
-           style="display:none;"></a>
-
-        <button class="teal-btn" onclick="checkAccessHashed(
-            '4e9c0a7ac39ca7a3d82089fb0b5f3f48500573bb45c6c7ebe2fdba452d45837d',
-            'resumeLink'
-        )">
-            Access Workshop
-        </button>
-    </div>
-
-    
- <div class="workshop">
-        <h2>YouTube Rewind Workshop</h2>
-
-        <!-- Hidden link that opens in new tab -->
-        <a id="youtubeLink"
-           href="SemesterProject25.html"
-           target="_blank"
-           style="display:none;"></a>
-
-        <button class="teal-btn" onclick="checkAccessHashed(
-            '48e362b5d7b5571b407ddd78babbba9cb9eb631e19cbc4d214de77f4ecc59406',
-            'youtubeLink'
-        )">
-            Access Workshop
-        </button>
-    </div>
-
-   
-    <!--Hand Gesture Recognition Semester Project
-    <div class="workshop">
-        <h2>Hand Gesture Recognition | Semester Project</h2>
-
-         Hidden link that opens in new tab
-        <a id="gestureLink"
-            href="SemesterProject25.html"
-            target="_blank"
-            style="display:none;"></a>
-
-
-        <button class="teal-btn" onclick="checkAccessHashed(
-            '14c2136e88c7720d13c308c849af2ddac94f5cc7775f88ce6fa4a2273b174ec3',
-            'gestureLink'
-        )">
-            Access Workshop
-        </button>
-    </div>
-
-    Halloween Workshop 
-    <div class="workshop">
-        <h2>Halloween 2025 Workshop</h2>
-
-       Hidden link that opens in new tab 
-        <a id="halloweenLink"
-           href="https://sabina-sosa.github.io/shelloween/"
-           target="_blank"
-           style="display:none;"></a>
-
-        <button class="teal-btn" onclick="checkAccessHashed(
-            '2d19b879ecb97432cfbe1bcfbb8eaf9af3ea8da767e845d1ec59c6049971e3c3',
-            'halloweenLink'
-        )">
-            Access Workshop
-        </button>
-    </div> -->
 
 </section>
 
-<!-- Hashing + Secure Access -->
-<script>
-async function sha256(message) {
-    const msgBuffer = new TextEncoder().encode(message);    
-    const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
-}
 
-async function checkAccessHashed(storedHash, linkId) {
-    const userInput = prompt("Enter access code:");
-    if (!userInput) return;
-
-    const inputHash = await sha256(userInput);
-
-    if (inputHash === storedHash) {
-        // Clicking a real <a> element NEVER gets popup-blocked
-        document.getElementById(linkId).click();
-    } else {
-        alert("Incorrect code. Please try again!");
-    }
-}
-</script>
-
-    
 <!-------- footer ---------->
 
 <section class="footer">
@@ -243,6 +63,7 @@ async function checkAccessHashed(storedHash, linkId) {
             
         </div>
         <a class="footer-link"><p>made with <i class="fa fa-heart-o"></i> by GWC</p></a>
+        <a class="officer-link" href="officer-login.html">Officer Login</a>
 </section>   
   
   
@@ -257,7 +78,85 @@ async function checkAccessHashed(storedHash, linkId) {
     function hideMenu() {
         navLinks.style.right = "-200px";
     }
-</script> 
-    
+</script>
+
+<!-- Load workshops + password-gated materials -->
+<script type="module">
+  import { app } from "./firebase-config.js";
+  import { getFirestore, collection, getDocs, query, orderBy }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const db = getFirestore(app);
+
+  async function sha256(message) {
+    const msgBuffer  = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+    const hashArray  = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  async function checkAccess(passwordHash, workshopId) {
+    const userInput = prompt("Enter the password for this workshop:");
+    if (!userInput) return;
+
+    const inputHash = await sha256(userInput);
+    if (inputHash !== passwordHash) {
+      alert("Incorrect password. Please try again!");
+      return;
+    }
+
+    window.location.href = "workshop-materials.html?id=" + encodeURIComponent(workshopId);
+  }
+
+  async function loadWorkshops() {
+    const list = document.getElementById("workshopList");
+    try {
+      const snap = await getDocs(query(collection(db, "workshops"), orderBy("createdAt", "desc")));
+
+      if (snap.empty) {
+        list.innerHTML = "<div class='empty-state'>New workshops are on the way — check back soon!</div>";
+        return;
+      }
+
+      list.innerHTML = "";
+      snap.forEach(d => {
+        const w = d.data();
+
+        const item = document.createElement("div");
+        item.className = "workshop";
+        item.innerHTML = `<h2>${escapeHtml(w.name)}</h2>`;
+
+        const hasMaterials = Array.isArray(w.materials) && w.materials.length > 0 && w.passwordHash;
+
+        if (hasMaterials) {
+          const btn = document.createElement("button");
+          btn.className = "teal-btn";
+          btn.textContent = "Access Workshop";
+          btn.addEventListener("click", () => checkAccess(w.passwordHash, d.id));
+          item.appendChild(btn);
+        } else {
+          const note = document.createElement("span");
+          note.className = "w-pts";
+          note.textContent = "No materials yet";
+          item.appendChild(note);
+        }
+
+        list.appendChild(item);
+      });
+    } catch (err) {
+      console.error("Load workshops error:", err);
+      list.innerHTML = "<div class='empty-state'>Couldn't load workshops right now. Please try again later.</div>";
+    }
+  }
+
+  loadWorkshops();
+</script>
+
 </body>
-</html>    
+</html>

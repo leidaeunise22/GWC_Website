@@ -209,6 +209,8 @@ h1{
     background-size: cover;
     text-align: center;
     color: #fff;
+    position: relative;
+    overflow: hidden;
 }
 .sub-header h1{
     margin-top: 160px;
@@ -547,6 +549,8 @@ h1{
   margin: 20px 0;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 /* make sure the title doesn’t stick too close to the button */
@@ -564,8 +568,38 @@ h1{
   transition: transform 0.2s ease;
 }
 
+.workshop-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Materials shown in the officer dashboard's workshop list */
+.w-materials {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.material-link {
+  font-size: 12px;
+  color: #009688;
+  text-decoration: none;
+  border: 1px solid #009688;
+  border-radius: 6px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+.material-link:hover { background: #009688; color: #fff; }
+
 .workshop .teal-btn:hover {
   transform: scale(1.05);
+}
+
+.back-btn {
+  display: inline-block;
+  text-align: center;
+  width: 15%;
+  padding: 10px 0;
 }
 
 /*------- Contact Us Page ------------*/
@@ -622,4 +656,767 @@ h1{
 .footer-link{
     text-decoration: none;
     color: #777;
+}
+
+.officer-link{
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: #bbb;
+}
+.officer-link:hover{
+    color: #009688;
+}
+
+/*------- Auth loading screen (login / dashboard) ------------*/
+
+body { background: #fff; }
+
+#loadingScreen {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e0f2f1;
+    border-top-color: #009688;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#pageContent { display: none; }
+
+/*------- Officer Login Page ------------*/
+
+.login-wrapper {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.login-box {
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+}
+
+.login-box img {
+    width: 80px;
+    margin-bottom: 16px;
+}
+
+.login-box h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.login-box p {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 28px;
+}
+
+.login-box label {
+    display: block;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 6px;
+    margin-top: 16px;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.3s;
+}
+
+.login-box input:focus { border-color: #009688; }
+
+.login-btn {
+    width: 100%;
+    margin-top: 28px;
+    padding: 14px;
+    background: #009688;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.login-btn:hover    { background: #00796B; }
+.login-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+#loginMessage {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none;
+}
+#loginMessage.error {
+    background: #fce4ec;
+    color: #b71c1c;
+    border: 1px solid #f48fb1;
+    display: block;
+}
+
+#signupMessage {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none;
+}
+#signupMessage.error {
+    background: #fce4ec;
+    color: #b71c1c;
+    border: 1px solid #f48fb1;
+    display: block;
+}
+#signupMessage.success {
+    background: #e0f2f1;
+    color: #00695c;
+    border: 1px solid #80cbc4;
+    display: block;
+}
+
+.auth-switch-link {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    background: none;
+    border: none;
+    color: #009688;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.auth-switch-link:hover { color: #00695c; }
+
+@media (max-width: 480px) {
+    .login-box { padding: 32px 20px; }
+}
+
+/*------- Submit Attendance (points) Page ------------*/
+
+.points-intro {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 60px 20px 20px;
+    text-align: center;
+}
+.points-intro h1 { font-size: 32px; margin-bottom: 12px; }
+.points-intro p  { font-size: 16px; color: #555; }
+
+.points-form-section {
+    max-width: 600px;
+    margin: 30px auto 80px;
+    padding: 40px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.points-form-section label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+    margin-top: 18px;
+}
+
+.points-form-section input,
+.points-form-section select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.3s;
+    background: #fff;
+}
+
+.points-form-section input:focus,
+.points-form-section select:focus { border-color: #009688; }
+
+.submit-btn {
+    width: 100%;
+    margin-top: 28px;
+    padding: 14px;
+    background: #009688;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.submit-btn:hover    { background: #00796B; }
+.submit-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+.note { font-size: 12px; color: #888; margin-top: 4px; }
+
+/* Popup toast (success / error) used on the attendance form */
+.toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-16px);
+    z-index: 10000;
+    min-width: 280px;
+    max-width: 90%;
+    padding: 16px 44px 16px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+.toast.success { background: #e0f2f1; color: #00695c; border: 1px solid #80cbc4; }
+.toast.error   { background: #fce4ec; color: #b71c1c; border: 1px solid #f48fb1; }
+
+.toast-close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.6;
+}
+.toast-close:hover { opacity: 1; }
+
+@media (max-width: 480px) {
+    .toast { min-width: 0; width: 90%; }
+}
+
+@media (max-width: 640px) {
+    .points-form-section { margin: 20px 16px 60px; padding: 24px 20px; }
+}
+
+/*------- Leaderboard (points.html tab) ------------*/
+
+.points-tabs-wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.points-tabs-wrap .tabs { justify-content: center; }
+
+.leaderboard-section {
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    padding: 32px;
+    margin-bottom: 80px;
+}
+
+/* Podium */
+.podium {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+.podium-place {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 110px;
+}
+.podium-place.place-1 { order: 2; }
+.podium-place.place-2 { order: 1; }
+.podium-place.place-3 { order: 3; }
+
+.podium-medal { font-size: 28px; margin-bottom: 4px; }
+.podium-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.podium-points { font-size: 12px; color: #777; margin-bottom: 8px; }
+.podium-stand {
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+}
+.podium-place.place-1 .podium-stand { height: 110px; background: linear-gradient(#ffd54f, #ffb300); }
+.podium-place.place-2 .podium-stand { height: 80px;  background: linear-gradient(#e0e0e0, #b0bec5); }
+.podium-place.place-3 .podium-stand { height: 60px;  background: linear-gradient(#ffcb96, #d98b52); }
+
+/* Scrollable ranked list, header stays put */
+.leaderboard-table-wrap {
+    max-height: 420px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+.leaderboard-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.leaderboard-table .rank-col { width: 60px; text-align: center; }
+
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #e0f2f1;
+    color: #00695c;
+    font-weight: 700;
+    font-size: 12px;
+}
+.rank-badge.gold   { background: #fff3cd; color: #8a6d00; }
+.rank-badge.silver { background: #eceff1; color: #546e7a; }
+.rank-badge.bronze { background: #ffe0cc; color: #a15c22; }
+
+@media (max-width: 640px) {
+    .leaderboard-section { padding: 20px; margin-bottom: 60px; }
+    .podium { gap: 6px; }
+    .podium-place { width: 88px; }
+    .podium-name { font-size: 11px; }
+    .leaderboard-table-wrap { max-height: 320px; }
+}
+
+/*------- Officer Dashboard Page ------------*/
+
+.dashboard {
+    width: 90%;
+    max-width: 1100px;
+    margin: 60px auto 80px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.dashboard-header h1 { font-size: 28px; color: #333; }
+.dashboard-header span { font-size: 13px; color: #777; display: block; margin-top: 4px; }
+
+.logout-btn {
+    background: transparent;
+    border: 1px solid #009688;
+    color: #009688;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.logout-btn:hover { background: #009688; color: #fff; }
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #eee;
+    flex-wrap: wrap;
+}
+.tab-btn {
+    padding: 10px 24px;
+    background: none;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #999;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: 0.2s;
+}
+.tab-btn.active { color: #009688; border-bottom-color: #009688; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.card {
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    padding: 32px;
+    margin-bottom: 24px;
+}
+.card h2 { font-size: 18px; margin-bottom: 20px; color: #333; }
+.card-subtext { font-size: 13px; color: #777; margin-bottom: 20px; }
+
+.form-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    align-items: flex-end;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 180px;
+}
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+}
+.form-group input,
+.form-group select {
+    padding: 11px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.3s;
+    background: #fff;
+}
+.form-group input:focus,
+.form-group select:focus { border-color: #009688; }
+
+.form-row--tight { margin-bottom: 20px; }
+.table-scroll { overflow-x: auto; }
+
+.field-md { max-width: 180px; }
+.field-lg { max-width: 240px; }
+.field-xl { max-width: 260px; }
+
+#addWorkshopMsg { font-size: 13px; margin-top: 8px; }
+#materialPdfRow { display: none; }
+
+.add-material-toggle {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    background: transparent;
+    border: 2px dashed #009688;
+    color: #009688;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+.add-material-toggle:hover { background: #e0f2f1; }
+
+.material-section {
+    margin: 20px 0;
+    padding: 16px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+}
+.material-section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+}
+.material-type-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.pending-materials-list {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.pending-material-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #333;
+}
+.remove-material-btn {
+    background: none;
+    border: none;
+    color: #c62828;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 0 4px;
+}
+.type-btn {
+    flex: 1;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #777;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.type-btn.active {
+    background: #e0f2f1;
+    border-color: #009688;
+    color: #009688;
+}
+
+/* Dashboard buttons get the fuller teal-btn treatment, scoped so it
+   doesn't change .teal-btn's appearance on other pages */
+.dashboard .teal-btn {
+    padding: 11px 28px;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    white-space: nowrap;
+}
+.dashboard .teal-btn:hover    { background: #00796B; }
+.dashboard .teal-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+.workshop-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.w-name { font-weight: 600; font-size: 15px; color: #333; }
+.w-pts  { font-size: 13px; color: #777; }
+.w-date { font-size: 12px; color: #aaa; }
+.delete-btn {
+    background: transparent;
+    border: 1px solid #e53935;
+    color: #e53935;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+}
+.delete-btn:hover { background: #e53935; color: #fff; }
+
+/* Active code display */
+.active-code-box {
+    margin-top: 24px;
+    padding: 28px 24px;
+    background: #e0f2f1;
+    border-radius: 10px;
+    border: 1px solid #80cbc4;
+    text-align: center;
+    display: none;
+}
+.active-code-box .workshop-label {
+    font-size: 14px;
+    color: #555;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.active-code-box .big-code {
+    font-size: 64px;
+    font-weight: 700;
+    color: #009688;
+    letter-spacing: 12px;
+    line-height: 1;
+    margin: 10px 0 16px;
+}
+.active-code-box .expires-label {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 4px;
+}
+.active-code-box .countdown {
+    font-size: 26px;
+    font-weight: 700;
+    color: #e65100;
+    margin-bottom: 14px;
+}
+.active-code-box .countdown.urgent { color: #c62828; }
+
+.copy-btn {
+    background: transparent;
+    border: 1px solid #009688;
+    color: #009688;
+    padding: 7px 20px;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.copy-btn:hover { background: #009688; color: #fff; }
+
+.expired-notice {
+    font-size: 14px;
+    color: #c62828;
+    font-weight: 600;
+    margin-top: 10px;
+    display: none;
+}
+
+/* Submissions */
+.submissions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.submissions-table th {
+    background: #009688;
+    color: #fff;
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+}
+.submissions-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #eee;
+    color: #444;
+}
+.submissions-table tr:hover td { background: #f1f8f7; }
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* Member Lookup */
+.member-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    padding: 18px 20px;
+    margin-bottom: 14px;
+}
+.member-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    flex-wrap: wrap;
+}
+.member-name  { font-weight: 600; font-size: 16px; color: #333; }
+.member-email { font-size: 13px; color: #777; margin-top: 2px; }
+.member-stats {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.member-attendance {
+    font-size: 12px;
+    color: #888;
+    white-space: nowrap;
+}
+.member-total {
+    background: #e0f2f1;
+    color: #009688;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+.member-workshops {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.member-workshop-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 8px 12px;
+    background: #f9f9f9;
+    border-radius: 6px;
+}
+
+@media (max-width: 600px) {
+    .submissions-table { font-size: 11px; }
+    .submissions-table th,
+    .submissions-table td { padding: 8px; }
+    .active-code-box .big-code { font-size: 44px; letter-spacing: 8px; }
 }
