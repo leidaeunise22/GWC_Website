@@ -62,7 +62,7 @@ jobs:
           fi
           echo "All placeholders substituted."
       - name: Check firebase-config.js is still valid JS
-        run: node --input-type=module --check firebase-config.js
+        run: node --check firebase-config.js
 
   # Deploys to GitHub Pages. Only runs on an actual push to main, and only
   # after verify has passed.
