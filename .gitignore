@@ -1,3 +1,8 @@
 .DS_Store
 .DS_Store
 .DS_Store
+
+# Local secrets for testing outside CI — never commit real keys here.
+# See firebase-config.js / contact.html for the placeholders they fill in,
+# and scripts/apply-local-env.js for how they get applied.
+.env

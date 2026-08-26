@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "apply-local-env": "node scripts/apply-local-env.js",
+    "restore-config": "git checkout -- firebase-config.js contact.html"
+  },
   "dependencies": {
     "firebase": "^12.11.0"
   }

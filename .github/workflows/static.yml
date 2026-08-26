@@ -6,6 +6,11 @@ on:
   push:
     branches: ["main"]
 
+  # Runs on PRs targeting main too, but only as far as the verify job below —
+  # it never touches GitHub Pages, so opening/updating a PR can't deploy it.
+  pull_request:
+    branches: ["main"]
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -22,8 +27,48 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
+  # Runs on every push and PR. Confirms the secret-injection step actually
+  # fills in every placeholder — catches a missing/renamed repo secret before
+  # it ever reaches main. Does not touch GitHub Pages.
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Inject secrets into config files
+        env:
+          FIREBASE_API_KEY:             ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_AUTH_DOMAIN:         ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_PROJECT_ID:          ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET:      ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_APP_ID:              ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_MEASUREMENT_ID:      ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+          WEB3FORMS_ACCESS_KEY:         ${{ secrets.WEB3FORMS_ACCESS_KEY }}
+        run: |
+          sed -i "s#__FIREBASE_API_KEY__#${FIREBASE_API_KEY}#g"                     firebase-config.js
+          sed -i "s#__FIREBASE_AUTH_DOMAIN__#${FIREBASE_AUTH_DOMAIN}#g"             firebase-config.js
+          sed -i "s#__FIREBASE_PROJECT_ID__#${FIREBASE_PROJECT_ID}#g"               firebase-config.js
+          sed -i "s#__FIREBASE_STORAGE_BUCKET__#${FIREBASE_STORAGE_BUCKET}#g"       firebase-config.js
+          sed -i "s#__FIREBASE_MESSAGING_SENDER_ID__#${FIREBASE_MESSAGING_SENDER_ID}#g" firebase-config.js
+          sed -i "s#__FIREBASE_APP_ID__#${FIREBASE_APP_ID}#g"                       firebase-config.js
+          sed -i "s#__FIREBASE_MEASUREMENT_ID__#${FIREBASE_MEASUREMENT_ID}#g"       firebase-config.js
+          sed -i "s#__WEB3FORMS_ACCESS_KEY__#${WEB3FORMS_ACCESS_KEY}#g"             contact.html
+      - name: Check every placeholder was replaced
+        run: |
+          if grep -Ro "__[A-Z0-9_]*__" firebase-config.js contact.html; then
+            echo "::error::A placeholder above was left unsubstituted — its matching repo secret is missing, empty, or misnamed."
+            exit 1
+          fi
+          echo "All placeholders substituted."
+      - name: Check firebase-config.js is still valid JS
+        run: node --input-type=module --check firebase-config.js
+
+  # Deploys to GitHub Pages. Only runs on an actual push to main, and only
+  # after verify has passed.
   deploy:
+    needs: verify
+    if: github.event_name == 'push'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
