@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Girls Who Code UTEP – Leaderboard</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+
+<style>
+  .leaderboard-section {
+    max-width: 800px;
+    margin: 60px auto 80px;
+    padding: 0 20px;
+    text-align: center;
+  }
+
+  .leaderboard-section h1 {
+    font-size: 36px;
+    margin-bottom: 8px;
+  }
+
+  .leaderboard-section .subtitle {
+    font-size: 15px;
+    color: #777;
+    margin-bottom: 50px;
+  }
+
+  /* ── Podium ── */
+  .podium {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+  }
+
+  .podium-place {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 140px;
+  }
+
+  .podium-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  .podium-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+  }
+
+  .podium-pts {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 10px;
+  }
+
+  .podium-block {
+    width: 140px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* 1st place */
+  .place-1 .podium-avatar { background: #FFD700; }
+  .place-1 .podium-block  { height: 120px; background: #FFD700; }
+
+  /* 2nd place */
+  .place-2 .podium-avatar { background: #C0C0C0; }
+  .place-2 .podium-block  { height: 90px; background: #C0C0C0; }
+
+  /* 3rd place */
+  .place-3 .podium-avatar { background: #CD7F32; }
+  .place-3 .podium-block  { height: 65px; background: #CD7F32; }
+
+  /* reorder so 1st is in center */
+  .place-2 { order: 1; }
+  .place-1 { order: 2; }
+  .place-3 { order: 3; }
+
+  /* ── Rankings list ── */
+  .rankings-card {
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    padding: 28px 32px;
+    text-align: left;
+  }
+
+  .rankings-card h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+  }
+
+  .rank-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #eee;
+    gap: 16px;
+  }
+  .rank-row:last-child { border-bottom: none; }
+
+  .rank-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: #009688;
+    width: 32px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .rank-name {
+    flex: 1;
+    font-weight: 600;
+    font-size: 15px;
+    color: #333;
+  }
+
+  .rank-pts {
+    background: #e0f2f1;
+    color: #00695c;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #aaa;
+    font-size: 14px;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 60px;
+    color: #aaa;
+    font-size: 14px;
+  }
+
+  .my-points-link {
+    text-align: center;
+    margin-top: 24px;
+  }
+  .my-points-link a {
+    color: #009688;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .my-points-link a:hover { text-decoration: underline; }
+
+  @media (max-width: 500px) {
+    .podium-block { width: 100px; }
+    .podium-place { min-width: 100px; }
+    .rankings-card { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="sub-header">
+  <nav>
+    <a href="index.html"><img src="images/logo.png"></a>
+    <div class="nav-links" id="navLinks">
+      <i class="fa fa-close" onclick="hideMenu()"></i>
+      <ul>
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="officers.html">OFFICERS</a></li>
+        <li><a href="getinvolved.html">GET INVOLVED</a></li>
+        <li><a href="workshops.html">WORKSHOPS</a></li>
+        <li><a href="calendar.html">CALENDAR</a></li>
+        <li><a href="contact.html">CONTACT</a></li>
+      </ul>
+    </div>
+    <i class="fa fa-bars" onclick="showMenu()"></i>
+  </nav>
+  <h1>Leaderboard</h1>
+</section>
+
+<div class="leaderboard-section">
+  <h1>🏆 Top Members</h1>
+  <p class="subtitle">Recognizing our most active Girls Who Code members!</p>
+
+  <div id="leaderboardContent" class="loading">Loading leaderboard…</div>
+
+  <div class="my-points-link">
+    <a href="lookup.html">Check your own points →</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<section class="footer">
+  <h4>About Us</h4>
+  <p>&copy 2025 Girls Who Code UTEP Chapter. Made with passion and teamwork.</p>
+  <div class="icons">
+    <a href="https://www.facebook.com/GirlsWhoCode" target="_blank"><i class="fa fa-facebook"></i></a>
+    <a href="https://x.com/girlswhocode" target="_blank"><i class="fa fa-twitter"></i></a>
+    <a href="https://www.instagram.com/gwcutep/" target="_blank"><i class="fa fa-instagram"></i></a>
+    <a href="https://www.linkedin.com/company/girls-who-code-utep/posts/?feedView=all" target="_blank"><i class="fa fa-linkedin"></i></a>
+    <a href="https://teams.microsoft.com/v2/" target="_blank"><i class="fa fa-users"></i></a>
+    <a href="https://minetracker.utep.edu/organization/girlswhocodeutep" target="_blank"><i class="fa fa-star"></i></a>
+  </div>
+  <a class="footer-link"><p>made with <i class="fa fa-heart-o"></i> by GWC</p></a>
+</section>
+
+<script>
+  var navLinks = document.getElementById("navLinks");
+  function showMenu() { navLinks.style.right = "0"; }
+  function hideMenu() { navLinks.style.right = "-200px"; }
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, getDocs }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "",
+    authDomain: "gwc-tracker-84577.firebaseapp.com",
+    projectId: "gwc-tracker-84577",
+    storageBucket: "gwc-tracker-84577.firebasestorage.app",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: ""
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  async function loadLeaderboard() {
+    const content = document.getElementById("leaderboardContent");
+
+    try {
+      const snap = await getDocs(collection(db, "attendance"));
+
+      if (snap.empty) {
+        content.innerHTML = "<div class='empty-state'>No points yet — check back after the first workshop!</div>";
+        return;
+      }
+
+      // Aggregate points per member
+      const members = {};
+      snap.forEach(d => {
+        const s = d.data();
+        if (!members[s.email]) {
+          members[s.email] = {
+            name:   `${s.firstName} ${s.lastName}`,
+            points: 0
+          };
+        }
+        members[s.email].points += s.pointsAwarded || 0;
+      });
+
+      // Sort by points descending
+      const ranked = Object.values(members).sort((a, b) => b.points - a.points);
+
+      if (ranked.length === 0) {
+        content.innerHTML = "<div class='empty-state'>No points yet!</div>";
+        return;
+      }
+
+      const medals = ["🥇", "🥈", "🥉"];
+      const placeClass = ["place-1", "place-2", "place-3"];
+      const initial = name => name.charAt(0).toUpperCase();
+
+      // Build podium (top 3)
+      let podiumHTML = "<div class='podium'>";
+      for (let i = 0; i < Math.min(3, ranked.length); i++) {
+        const m = ranked[i];
+        podiumHTML += `
+          <div class="podium-place ${placeClass[i]}">
+            <div class="podium-avatar">${initial(m.name)}</div>
+            <div class="podium-name">${m.name}</div>
+            <div class="podium-pts">${m.points} pts</div>
+            <div class="podium-block">${medals[i]}</div>
+          </div>`;
+      }
+      podiumHTML += "</div>";
+
+      // Build rankings list (all members)
+      let listHTML = `
+        <div class="rankings-card">
+          <h2>Full Rankings</h2>`;
+      ranked.forEach((m, i) => {
+        listHTML += `
+          <div class="rank-row">
+            <span class="rank-num">${i + 1}</span>
+            <span class="rank-name">${m.name}</span>
+            <span class="rank-pts">${m.points} pts</span>
+          </div>`;
+      });
+      listHTML += "</div>";
+
+      content.innerHTML = podiumHTML + listHTML;
+
+    } catch (err) {
+      console.error(err);
+      content.innerHTML = "<div class='empty-state'>Could not load leaderboard. Please try again later.</div>";
+    }
+  }
+
+  loadLeaderboard();
+</script>
+
+</body>
+</html>

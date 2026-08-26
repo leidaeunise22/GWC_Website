@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Girls Who Code UTEP – Officer Dashboard</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+
+<style>
+  body { background: #fff; }
+
+  #loadingScreen {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e0f2f1;
+    border-top-color: #009688;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #pageContent { display: none; }
+
+  /* ── Dashboard layout ── */
+  .dashboard {
+    width: 90%;
+    max-width: 1100px;
+    margin: 60px auto 80px;
+  }
+
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .dashboard-header h1 { font-size: 28px; color: #333; }
+  .dashboard-header span { font-size: 13px; color: #777; display: block; margin-top: 4px; }
+
+  .logout-btn {
+    background: transparent;
+    border: 1px solid #009688;
+    color: #009688;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .logout-btn:hover { background: #009688; color: #fff; }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #eee;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 10px 24px;
+    background: none;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #999;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: 0.2s;
+  }
+  .tab-btn.active { color: #009688; border-bottom-color: #009688; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .card {
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .card h2 { font-size: 18px; margin-bottom: 20px; color: #333; }
+
+  .form-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    align-items: flex-end;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 180px;
+  }
+  .form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+  }
+  .form-group input,
+  .form-group select {
+    padding: 11px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.3s;
+    background: #fff;
+  }
+  .form-group input:focus,
+  .form-group select:focus { border-color: #009688; }
+
+  .teal-btn {
+    background: #009688;
+    color: #fff;
+    border: none;
+    padding: 11px 28px;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    white-space: nowrap;
+  }
+  .teal-btn:hover    { background: #00796B; }
+  .teal-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+  .workshop-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .w-name { font-weight: 600; font-size: 15px; color: #333; }
+  .w-pts  { font-size: 13px; color: #777; }
+  .w-date { font-size: 12px; color: #aaa; }
+  .delete-btn {
+    background: transparent;
+    border: 1px solid #e53935;
+    color: #e53935;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap;
+  }
+  .delete-btn:hover { background: #e53935; color: #fff; }
+
+  /* Active code display */
+  .active-code-box {
+    margin-top: 24px;
+    padding: 28px 24px;
+    background: #e0f2f1;
+    border-radius: 10px;
+    border: 1px solid #80cbc4;
+    text-align: center;
+    display: none;
+  }
+  .active-code-box .workshop-label {
+    font-size: 14px;
+    color: #555;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .active-code-box .big-code {
+    font-size: 64px;
+    font-weight: 700;
+    color: #009688;
+    letter-spacing: 12px;
+    line-height: 1;
+    margin: 10px 0 16px;
+  }
+  .active-code-box .expires-label {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 4px;
+  }
+  .active-code-box .countdown {
+    font-size: 26px;
+    font-weight: 700;
+    color: #e65100;
+    margin-bottom: 14px;
+  }
+  .active-code-box .countdown.urgent { color: #c62828; }
+
+  .copy-btn {
+    background: transparent;
+    border: 1px solid #009688;
+    color: #009688;
+    padding: 7px 20px;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .copy-btn:hover { background: #009688; color: #fff; }
+
+  .expired-notice {
+    font-size: 14px;
+    color: #c62828;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  /* Submissions */
+  .submissions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .submissions-table th {
+    background: #009688;
+    color: #fff;
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+  }
+  .submissions-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #eee;
+    color: #444;
+  }
+  .submissions-table tr:hover td { background: #f1f8f7; }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #aaa;
+    font-size: 14px;
+  }
+
+  @media (max-width: 600px) {
+    .submissions-table { font-size: 11px; }
+    .submissions-table th,
+    .submissions-table td { padding: 8px; }
+    .active-code-box .big-code { font-size: 44px; letter-spacing: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Loading screen — shown until Firebase resolves -->
+<div id="loadingScreen">
+  <div class="spinner"></div>
+</div>
+
+<!-- Page content — hidden until auth confirmed -->
+<div id="pageContent">
+
+  <section class="sub-header">
+    <nav>
+      <a href="index.html"><img src="images/logo.png"></a>
+      <div class="nav-links" id="navLinks">
+        <i class="fa fa-close" onclick="hideMenu()"></i>
+        <ul>
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="about.html">ABOUT</a></li>
+          <li><a href="officers.html">OFFICERS</a></li>
+          <li><a href="getinvolved.html">GET INVOLVED</a></li>
+          <li><a href="workshops.html">WORKSHOPS</a></li>
+          <li><a href="calendar.html">CALENDAR</a></li>
+          <li><a href="contact.html">CONTACT</a></li>
+        </ul>
+      </div>
+      <i class="fa fa-bars" onclick="showMenu()"></i>
+    </nav>
+    <h1>Officer Dashboard</h1>
+  </section>
+
+  <div class="dashboard">
+    <div class="dashboard-header">
+      <div>
+        <h1>Dashboard</h1>
+        <span id="loggedInAs"></span>
+      </div>
+      <button class="logout-btn" id="logoutBtn">Sign Out</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="workshops">Workshops</button>
+      <button class="tab-btn"        data-tab="generate">Generate Code</button>
+      <button class="tab-btn"        data-tab="submissions">Submissions</button>
+    </div>
+
+    <!-- TAB: Workshops -->
+    <div class="tab-panel active" id="tab-workshops">
+      <div class="card">
+        <h2>Add New Workshop</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Workshop Name</label>
+            <input type="text" id="wName" placeholder="e.g. Intro to Python">
+          </div>
+          <div class="form-group" style="max-width:140px;">
+            <label>Points</label>
+            <input type="number" id="wPoints" value="10" min="1">
+          </div>
+          <button class="teal-btn" id="addWorkshopBtn">Add Workshop</button>
+        </div>
+        <div id="addWorkshopMsg" style="font-size:13px; margin-top:8px;"></div>
+      </div>
+
+      <div class="card">
+        <h2>All Workshops</h2>
+        <div id="workshopList"><div class="empty-state">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- TAB: Generate Code -->
+    <div class="tab-panel" id="tab-generate">
+      <div class="card">
+        <h2>Generate Timed Attendance Code</h2>
+        <p style="font-size:13px; color:#777; margin-bottom:20px;">
+          Select a workshop and how long the code should be active. Share the 5-digit code with members during the event — it stops working once time runs out.
+        </p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Workshop</label>
+            <select id="codeWorkshopSelect">
+              <option value="">— Select a workshop —</option>
+            </select>
+          </div>
+          <div class="form-group" style="max-width:180px;">
+            <label>Duration</label>
+            <select id="codeDuration">
+              <option value="15">15 minutes</option>
+              <option value="30" selected>30 minutes</option>
+              <option value="60">1 hour</option>
+              <option value="120">2 hours</option>
+              <option value="180">3 hours</option>
+            </select>
+          </div>
+          <button class="teal-btn" id="generateBtn">Generate Code</button>
+        </div>
+
+        <div class="active-code-box" id="activeCodeBox">
+          <div class="workshop-label" id="activeWorkshopLabel"></div>
+          <div class="big-code" id="activeCode"></div>
+          <div class="expires-label">Code expires in:</div>
+          <div class="countdown" id="countdown"></div>
+          <button class="copy-btn" id="copyCodeBtn">Copy Code</button>
+          <div class="expired-notice" id="expiredNotice" style="display:none;">
+            ⛔ This code has expired. Generate a new one if needed.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Submissions -->
+    <div class="tab-panel" id="tab-submissions">
+      <div class="card">
+        <h2>Member Submissions</h2>
+        <div class="form-row" style="margin-bottom:20px;">
+          <div class="form-group" style="max-width:240px;">
+            <label>Filter by Workshop</label>
+            <select id="filterWorkshop">
+              <option value="all">All Workshops</option>
+            </select>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="submissions-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Workshop</th>
+                <th>Points</th>
+                <th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody id="submissionsBody">
+              <tr><td colspan="5" class="empty-state">Select a tab to load submissions.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="footer">
+    <h4>About Us</h4>
+    <p>&copy 2025 Girls Who Code UTEP Chapter. Made with passion and teamwork.</p>
+    <div class="icons">
+      <a href="https://www.facebook.com/GirlsWhoCode" target="_blank"><i class="fa fa-facebook"></i></a>
+      <a href="https://x.com/girlswhocode" target="_blank"><i class="fa fa-twitter"></i></a>
+      <a href="https://www.instagram.com/gwcutep/" target="_blank"><i class="fa fa-instagram"></i></a>
+      <a href="https://www.linkedin.com/company/girls-who-code-utep/posts/?feedView=all" target="_blank"><i class="fa fa-linkedin"></i></a>
+      <a href="https://teams.microsoft.com/v2/" target="_blank"><i class="fa fa-users"></i></a>
+      <a href="https://minetracker.utep.edu/organization/girlswhocodeutep" target="_blank"><i class="fa fa-star"></i></a>
+    </div>
+    <a class="footer-link"><p>made with <i class="fa fa-heart-o"></i> by GWC</p></a>
+  </section>
+
+</div><!-- end pageContent -->
+
+<script type="module">
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, getDocs, getDoc, doc, setDoc, deleteDoc, query, orderBy, where, Timestamp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "",
+    authDomain: "gwc-tracker-84577.firebaseapp.com",
+    projectId: "gwc-tracker-84577",
+    storageBucket: "gwc-tracker-84577.firebasestorage.app",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: ""
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+ 
+  let countdownInterval = null;
+ 
+  // ── Nav menu ─────────────────────────────────────────────
+  window.showMenu = () => { document.getElementById("navLinks").style.right = "0"; };
+  window.hideMenu = () => { document.getElementById("navLinks").style.right = "-200px"; };
+ 
+  // ── Tab switching ────────────────────────────────────────
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+      if (btn.dataset.tab === "submissions") loadSubmissions();
+    });
+  });
+ 
+  // ── Auth: wait for Firebase before showing anything ──────
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      // Confirmed logged in — show the page
+      document.getElementById("loggedInAs").textContent = "Signed in as " + user.email;
+      document.getElementById("loadingScreen").style.display = "none";
+      document.getElementById("pageContent").style.display  = "block";
+      loadWorkshops();
+    } else {
+      // Not logged in — redirect (loading screen stays up so no flash)
+      window.location.replace("officer-login.html");
+    }
+  });
+ 
+  // ── Logout ───────────────────────────────────────────────
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.replace("officer-login.html");
+  });
+ 
+  // ── Helpers ──────────────────────────────────────────────
+  function randomFiveDigit() {
+    return String(Math.floor(10000 + Math.random() * 90000));
+  }
+ 
+  function formatCountdown(ms) {
+    if (ms <= 0) return "00:00";
+    const totalSec = Math.floor(ms / 1000);
+    const mins = Math.floor(totalSec / 60);
+    const secs = totalSec % 60;
+    return String(mins).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
+  }
+ 
+  // ── Load Workshops ───────────────────────────────────────
+  async function loadWorkshops() {
+    const list         = document.getElementById("workshopList");
+    const codeSelect   = document.getElementById("codeWorkshopSelect");
+    const filterSelect = document.getElementById("filterWorkshop");
+ 
+    list.innerHTML = "<div class='empty-state'>Loading…</div>";
+    codeSelect.innerHTML   = "<option value=''>— Select a workshop —</option>";
+    filterSelect.innerHTML = "<option value='all'>All Workshops</option>";
+ 
+    const snap = await getDocs(query(collection(db, "workshops"), orderBy("createdAt", "desc")));
+ 
+    if (snap.empty) {
+      list.innerHTML = "<div class='empty-state'>No workshops yet. Add one above!</div>";
+      return;
+    }
+ 
+    list.innerHTML = "";
+    snap.forEach(d => renderWorkshopRow(d.id, d.data(), list, codeSelect, filterSelect));
+  }
+ 
+  function renderWorkshopRow(id, w, list, codeSelect, filterSelect) {
+    const date = w.createdAt?.toDate().toLocaleDateString() || "Today";
+    const item = document.createElement("div");
+    item.className = "workshop-item";
+    item.id = "w-" + id;
+    item.innerHTML = `
+      <span class="w-name">${w.name}</span>
+      <span class="w-pts">${w.points} pts</span>
+      <span class="w-date">Added ${date}</span>
+      <button class="delete-btn">Delete</button>`;
+ 
+    item.querySelector(".delete-btn").addEventListener("click", () => deleteWorkshop(id, w.name));
+    list.appendChild(item);
+ 
+    if (codeSelect && !codeSelect.querySelector(`option[value="${id}"]`)) {
+      codeSelect.appendChild(new Option(w.name, id));
+    }
+    if (filterSelect && !filterSelect.querySelector(`option[value="${w.name}"]`)) {
+      filterSelect.appendChild(new Option(w.name, w.name));
+    }
+  }
+ 
+  // ── Add Workshop ─────────────────────────────────────────
+  document.getElementById("addWorkshopBtn").addEventListener("click", async () => {
+    const name   = document.getElementById("wName").value.trim();
+    const points = parseInt(document.getElementById("wPoints").value);
+    const msgEl  = document.getElementById("addWorkshopMsg");
+ 
+    if (!name)   { msgEl.style.color = "#c62828"; msgEl.textContent = "Please enter a workshop name."; return; }
+    if (isNaN(points) || points < 1) { msgEl.style.color = "#c62828"; msgEl.textContent = "Please enter a valid points value."; return; }
+ 
+    const btn = document.getElementById("addWorkshopBtn");
+    btn.disabled = true;
+    btn.textContent = "Adding…";
+ 
+    try {
+      const addWithTimeout = Promise.race([
+        addDoc(collection(db, "workshops"), { name, points, createdAt: Timestamp.now() }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Firestore timed out. Please try again.")), 30000))
+      ]);
+      const newDoc = await addWithTimeout;
+ 
+      const list         = document.getElementById("workshopList");
+      const codeSelect   = document.getElementById("codeWorkshopSelect");
+      const filterSelect = document.getElementById("filterWorkshop");
+ 
+      if (list.querySelector(".empty-state")) list.innerHTML = "";
+      renderWorkshopRow(newDoc.id, { name, points, createdAt: null }, list, codeSelect, filterSelect);
+ 
+      msgEl.style.color = "#00695c";
+      msgEl.textContent = `✅ "${name}" added!`;
+      document.getElementById("wName").value   = "";
+      document.getElementById("wPoints").value = 10;
+      setTimeout(() => { msgEl.textContent = ""; }, 3000);
+    } catch(err) {
+      console.error("Add workshop error:", err);
+      msgEl.style.color = "#c62828";
+      msgEl.textContent = "Error saving workshop: " + err.message;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Add Workshop";
+    }
+  });
+ 
+  // ── Delete Workshop ──────────────────────────────────────
+  async function deleteWorkshop(id, name) {
+    if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+    await deleteDoc(doc(db, "workshops", id));
+ 
+    // Remove from UI instantly
+    const item = document.getElementById("w-" + id);
+    if (item) item.remove();
+ 
+    // Remove from dropdowns
+    const codeOpt   = document.querySelector(`#codeWorkshopSelect option[value="${id}"]`);
+    const filterOpt = document.querySelector(`#filterWorkshop option[value="${name}"]`);
+    if (codeOpt)   codeOpt.remove();
+    if (filterOpt) filterOpt.remove();
+ 
+    // Show empty state if nothing left
+    const list = document.getElementById("workshopList");
+    if (!list.querySelector(".workshop-item")) {
+      list.innerHTML = "<div class='empty-state'>No workshops yet. Add one above!</div>";
+    }
+  }
+ 
+  // ── Generate Timed Code ──────────────────────────────────
+  document.getElementById("generateBtn").addEventListener("click", async () => {
+    const workshopId = document.getElementById("codeWorkshopSelect").value;
+    const minutes    = parseInt(document.getElementById("codeDuration").value);
+ 
+    if (!workshopId) { alert("Please select a workshop first."); return; }
+ 
+    const wDoc = await getDoc(doc(db, "workshops", workshopId));
+    if (!wDoc.exists()) { alert("Workshop not found."); return; }
+    const workshop = wDoc.data();
+ 
+    const code      = randomFiveDigit();
+    const expiresAt = Date.now() + minutes * 60 * 1000;
+ 
+    await setDoc(doc(db, "activeCodes", workshopId), {
+      code,
+      workshopId,
+      workshopName:  workshop.name,
+      pointsAwarded: workshop.points,
+      expiresAt:     Timestamp.fromMillis(expiresAt),
+      createdAt:     Timestamp.now()
+    });
+ 
+    document.getElementById("activeWorkshopLabel").textContent = workshop.name;
+    document.getElementById("activeCode").textContent          = code;
+    document.getElementById("activeCodeBox").style.display     = "block";
+    document.getElementById("expiredNotice").style.display     = "none";
+    document.getElementById("copyCodeBtn").style.display       = "inline-block";
+ 
+    if (countdownInterval) clearInterval(countdownInterval);
+    const countdownEl = document.getElementById("countdown");
+ 
+    countdownInterval = setInterval(() => {
+      const remaining = expiresAt - Date.now();
+      if (remaining <= 0) {
+        clearInterval(countdownInterval);
+        countdownEl.textContent = "00:00";
+        countdownEl.classList.add("urgent");
+        document.getElementById("expiredNotice").style.display = "block";
+        document.getElementById("copyCodeBtn").style.display   = "none";
+      } else {
+        countdownEl.textContent = formatCountdown(remaining);
+        countdownEl.classList.toggle("urgent", remaining < 60000);
+      }
+    }, 1000);
+  });
+ 
+  document.getElementById("copyCodeBtn").addEventListener("click", () => {
+    navigator.clipboard.writeText(document.getElementById("activeCode").textContent)
+      .then(() => alert("Code copied!"));
+  });
+ 
+  // ── Load Submissions ─────────────────────────────────────
+  async function loadSubmissions() {
+    const tbody  = document.getElementById("submissionsBody");
+    const filter = document.getElementById("filterWorkshop").value;
+    tbody.innerHTML = "<tr><td colspan='5' class='empty-state'>Loading…</td></tr>";
+ 
+    const snap = await getDocs(query(collection(db, "attendance"), orderBy("submittedAt", "desc")));
+ 
+    const rows = [];
+    snap.forEach(d => {
+      const s = d.data();
+      if (filter !== "all" && s.workshopName !== filter) return;
+      const date = s.submittedAt?.toDate().toLocaleDateString() || "";
+      rows.push(`
+        <tr>
+          <td>${s.firstName} ${s.lastName}</td>
+          <td>${s.email}</td>
+          <td>${s.workshopName}</td>
+          <td>${s.pointsAwarded}</td>
+          <td>${date}</td>
+        </tr>`);
+    });
+ 
+    tbody.innerHTML = rows.length
+      ? rows.join("")
+      : "<tr><td colspan='5' class='empty-state'>No submissions found.</td></tr>";
+  };
+ 
+  document.getElementById("filterWorkshop").addEventListener("change", loadSubmissions);
+</script>
+ 
+</body>
+</html>

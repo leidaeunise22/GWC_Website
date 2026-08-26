@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Girls Who Code UTEP – Submit Attendance</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+
+<style>
+  .points-intro {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 60px 20px 20px;
+    text-align: center;
+  }
+  .points-intro h1 { font-size: 32px; margin-bottom: 12px; }
+  .points-intro p  { font-size: 16px; color: #555; }
+
+  .points-form-section {
+    max-width: 600px;
+    margin: 30px auto 80px;
+    padding: 40px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  .points-form-section label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+    margin-top: 18px;
+  }
+
+  .points-form-section input,
+  .points-form-section select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.3s;
+    background: #fff;
+  }
+
+  .points-form-section input:focus,
+  .points-form-section select:focus { border-color: #009688; }
+
+  .submit-btn {
+    width: 100%;
+    margin-top: 28px;
+    padding: 14px;
+    background: #009688;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .submit-btn:hover    { background: #00796B; }
+  .submit-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+  #formMessage {
+    margin-top: 20px;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: center;
+    display: none;
+  }
+  #formMessage.success { background: #e0f2f1; color: #00695c; border: 1px solid #80cbc4; display: block; }
+  #formMessage.error   { background: #fce4ec; color: #b71c1c; border: 1px solid #f48fb1; display: block; }
+
+  .note { font-size: 12px; color: #888; margin-top: 4px; }
+
+  @media (max-width: 640px) {
+    .points-form-section { margin: 20px 16px 60px; padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="sub-header">
+  <nav>
+    <a href="index.html"><img src="images/logo.png"></a>
+    <div class="nav-links" id="navLinks">
+      <i class="fa fa-close" onclick="hideMenu()"></i>
+      <ul>
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="about.html">ABOUT</a></li>
+        <li><a href="officers.html">OFFICERS</a></li>
+        <li><a href="getinvolved.html">GET INVOLVED</a></li>
+        <li><a href="workshops.html">WORKSHOPS</a></li>
+        <li><a href="calendar.html">CALENDAR</a></li>
+        <li><a href="contact.html">CONTACT</a></li>
+      </ul>
+    </div>
+    <i class="fa fa-bars" onclick="showMenu()"></i>
+  </nav>
+  <h1>Submit Attendance</h1>
+</section>
+
+<div class="points-intro">
+  <h1>Log Your Workshop Points</h1>
+  <p>Select the workshop you attended, enter your info, and type in the attendance code your officer shared during the event.</p>
+</div>
+
+<div class="points-form-section">
+  <form id="attendanceForm">
+
+    <label for="firstName">First Name</label>
+    <input type="text" id="firstName" placeholder="e.g. Maria" required>
+
+    <label for="lastName">Last Name</label>
+    <input type="text" id="lastName" placeholder="e.g. Garcia" required>
+
+    <label for="email">UTEP Email</label>
+    <input type="email" id="email" placeholder="e.g. mgarcia@miners.utep.edu" required>
+    <p class="note">Must end in @miners.utep.edu or @utep.edu</p>
+
+    <label for="workshopSelect">Workshop Attended</label>
+    <select id="workshopSelect" required>
+      <option value="">— Loading workshops… —</option>
+    </select>
+
+    <label for="attendanceCode">Attendance Code</label>
+    <input type="text" id="attendanceCode" placeholder="Enter the 5-digit code from your officer" maxlength="5" required>
+    <p class="note">This code is only valid for a limited time during the event.</p>
+
+    <button type="submit" class="submit-btn" id="submitBtn">Submit Attendance</button>
+    <div id="formMessage"></div>
+  </form>
+</div>
+
+<!-- Footer -->
+<section class="footer">
+  <h4>About Us</h4>
+  <p>&copy 2025 Girls Who Code UTEP Chapter. Made with passion and teamwork.</p>
+  <div class="icons">
+    <a href="https://www.facebook.com/GirlsWhoCode" target="_blank"><i class="fa fa-facebook"></i></a>
+    <a href="https://x.com/girlswhocode" target="_blank"><i class="fa fa-twitter"></i></a>
+    <a href="https://www.instagram.com/gwcutep/" target="_blank"><i class="fa fa-instagram"></i></a>
+    <a href="https://www.linkedin.com/company/girls-who-code-utep/posts/?feedView=all" target="_blank"><i class="fa fa-linkedin"></i></a>
+    <a href="https://teams.microsoft.com/v2/" target="_blank"><i class="fa fa-users"></i></a>
+    <a href="https://minetracker.utep.edu/organization/girlswhocodeutep" target="_blank"><i class="fa fa-star"></i></a>
+  </div>
+  <a class="footer-link"><p>made with <i class="fa fa-heart-o"></i> by GWC</p></a>
+</section>
+
+<script>
+  var navLinks = document.getElementById("navLinks");
+  function showMenu() { navLinks.style.right = "0"; }
+  function hideMenu() { navLinks.style.right = "-200px"; }
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDoc, getDocs, doc, query, where, orderBy, Timestamp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "",
+    authDomain: "gwc-tracker-84577.firebaseapp.com",
+    projectId: "gwc-tracker-84577",
+    storageBucket: "gwc-tracker-84577.firebasestorage.app",
+    messagingSenderId: "",
+    appId: "",
+    measurementId: ""
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  // ── Populate workshop dropdown ───────────────────────────
+  const workshopSelect = document.getElementById("workshopSelect");
+
+  async function loadWorkshops() {
+    const snap = await getDocs(query(collection(db, "workshops"), orderBy("createdAt", "asc")));
+    workshopSelect.innerHTML = "<option value=''>— Select a workshop —</option>";
+    snap.forEach(d => {
+      const opt = new Option(d.data().name, d.id);
+      workshopSelect.appendChild(opt);
+    });
+  }
+
+  loadWorkshops();
+
+  // ── Form submit ──────────────────────────────────────────
+  document.getElementById("attendanceForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const btn  = document.getElementById("submitBtn");
+    const msg  = document.getElementById("formMessage");
+    msg.className = "";
+    msg.style.display = "none";
+
+    const firstName  = capitalize(document.getElementById("firstName").value.trim());
+    const lastName   = capitalize(document.getElementById("lastName").value.trim());
+    const email      = document.getElementById("email").value.trim().toLowerCase();
+    const workshopId = document.getElementById("workshopSelect").value;
+    const enteredCode = document.getElementById("attendanceCode").value.trim();
+
+    // Validate email
+    if (!email.endsWith("@miners.utep.edu") && !email.endsWith("@utep.edu")) {
+      showMessage("Please use your UTEP email (@miners.utep.edu or @utep.edu).", "error");
+      return;
+    }
+
+    if (!workshopId) {
+      showMessage("Please select a workshop.", "error");
+      return;
+    }
+
+    if (!enteredCode) {
+      showMessage("Please enter the attendance code.", "error");
+      return;
+    }
+
+    try {
+      btn.disabled = true;
+      btn.textContent = "Submitting…";
+
+      // ── Check active code for this workshop ──
+      const codeDoc = await getDoc(doc(db, "activeCodes", workshopId));
+
+      if (!codeDoc.exists()) {
+        showMessage("No active code found for this workshop. Ask your officer to generate one.", "error");
+        btn.disabled = false;
+        btn.textContent = "Submit Attendance";
+        return;
+      }
+
+      const activeCode = codeDoc.data();
+
+      // Check expiry
+      const expiresAt = activeCode.expiresAt.toMillis();
+      if (Date.now() > expiresAt) {
+        showMessage("That code has expired. Contact your officer if you believe this is an error.", "error");
+        btn.disabled = false;
+        btn.textContent = "Submit Attendance";
+        return;
+      }
+
+      // Check code matches
+      if (enteredCode !== activeCode.code) {
+        showMessage("Incorrect attendance code. Please double-check and try again.", "error");
+        btn.disabled = false;
+        btn.textContent = "Submit Attendance";
+        return;
+      }
+
+      // Check for duplicate submission
+      const dupSnap = await getDocs(query(
+        collection(db, "attendance"),
+        where("email", "==", email),
+        where("workshopId", "==", workshopId)
+      ));
+
+      if (!dupSnap.empty) {
+        showMessage("You've already submitted attendance for this workshop!", "error");
+        btn.disabled = false;
+        btn.textContent = "Submit Attendance";
+        return;
+      }
+
+      // ── Save to Firestore ──
+      await addDoc(collection(db, "attendance"), {
+        firstName,
+        lastName,
+        email,
+        workshopId,
+        workshopName:  activeCode.workshopName,
+        pointsAwarded: activeCode.pointsAwarded,
+        status:        "approved",
+        submittedAt:   Timestamp.now()
+      });
+
+      showMessage(`✅ Success! You earned ${activeCode.pointsAwarded} points for "${activeCode.workshopName}".`, "success");
+      document.getElementById("attendanceForm").reset();
+      workshopSelect.innerHTML = "<option value=''>— Select a workshop —</option>";
+      loadWorkshops();
+
+    } catch (err) {
+      console.error(err);
+      showMessage("Something went wrong. Please try again.", "error");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Submit Attendance";
+    }
+  });
+
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+
+  function showMessage(text, type) {
+    const msg = document.getElementById("formMessage");
+    msg.textContent = text;
+    msg.className = type;
+  }
+</script>
+
+</body>
+</html>
