@@ -57,7 +57,7 @@
 
             <p>
                 Explore internship experiences from Girls Who Code UTEP officers.
-                Hover over a location to learn more.
+                Click on a location to learn more!
             </p>
         </div>
 
@@ -189,7 +189,18 @@
                 <p>Click to explore internships in this area.</p>
             </div>
         `);
+        
+        const sanFranciscoBayRegion = L.marker(
+            [37.55, -122.10]
+        ).addTo(map);
 
+        sanFranciscoBayRegion.bindPopup(`
+            <div class="internship-popup">
+                <h3>San Francisco Bay Area</h3>
+                <p>NVIDIA and surrounding internship locations</p>
+                <p>Click to explore internships in this area.</p>
+            </div>
+        `);
 
 
         // =================================================
@@ -198,7 +209,7 @@
 
         const whiteSandsIcon = L.icon({
             iconUrl: "images/wsmr.png",
-            iconSize: [40, 40],
+            iconSize: [60, 60],
             iconAnchor: [20, 20],
             popupAnchor: [0, -20]
         });
@@ -258,7 +269,7 @@
 
         const microsoftIcon = L.icon({
             iconUrl: "images/microsoft.png",
-            iconSize: [40, 40],
+            iconSize: [50, 50],
             iconAnchor: [20, 20],
             popupAnchor: [0, -20]
         });
@@ -321,7 +332,7 @@
 
         const amazonIcon = L.icon({
             iconUrl: "images/amazon.png",
-            iconSize: [40, 40],
+            iconSize: [60, 60],
             iconAnchor: [20, 20],
             popupAnchor: [0, -20]
         });
@@ -349,7 +360,7 @@
                 </p>
 
                 <p>
-                    Bellevue, WA
+                    Bellevue, Washington
                 </p>
 
                 <p>
@@ -380,7 +391,7 @@
 
         const blueOriginIcon = L.icon({
             iconUrl: "images/blueorigin.png",
-            iconSize: [40, 40],
+            iconSize: [60, 50],
             iconAnchor: [20, 20],
             popupAnchor: [0, -20]
         });
@@ -408,7 +419,7 @@
                 </p>
 
                 <p>
-                    Kent, WA
+                    Kent, Washington
                 </p>
 
                 <p>
@@ -437,7 +448,7 @@
 
         const princetonIcon = L.icon({
             iconUrl: "images/princeton.png",
-            iconSize: [40, 40],
+            iconSize: [60, 50],
             iconAnchor: [20, 20],
             popupAnchor: [0, -20]
         });
@@ -485,7 +496,448 @@
             this.closePopup();
         });
 
+        
+        // =================================================
+        // UTEP
+        // =================================================
 
+        const utepIcon = L.icon({
+            iconUrl: "images/utep.png",
+            iconSize: [60, 60],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        const utepMarker = L.marker(
+            [31.7700, -106.5048],
+            { icon: utepIcon }
+        );
+
+        utepMarker.bindPopup(`
+            <div class="internship-popup carousel">
+
+                <button class="carousel-btn prev-btn">&#10094;</button>
+
+                <div class="carousel-content">
+
+                    <!-- Person 1 -->
+                    <div class="carousel-slide active">
+
+                        <h3>UTEP</h3>
+
+                        <h4>
+                            <strong>Yhali Acosta</strong>
+                        </h4>
+
+                        <p>
+                            <strong>Special Events Intern</strong>
+                        </p>
+
+                        <p>
+                            <strong>06/27/26 - 02/28/27</strong>
+                        </p>
+
+                        <p>
+                            El Paso, Texas
+                        </p>
+
+                        <p>
+                            During my internship, I assist with event setup and operations,
+                            coordinate event logistics, support guests, and help prepare
+                            event and marketing materials. My favorite part is being
+                            involved in the events and seeing everything come together
+                            while creating a positive experience for guests.
+                        </p>
+
+                        <div class="carousel-counter">
+                            1 of 2
+                        </div>
+
+                    </div>
+
+
+                    <!-- Person 2 -->
+                    <div class="carousel-slide">
+
+                        <h3>UTEP/CAHSI</h3>
+
+                        <h4>
+                            <strong>Evelyn Matthei</strong>
+                        </h4>
+
+                        <p>
+                            <strong>Student Assistant</strong>
+                        </p>
+
+                        <p>
+                            <strong>8/11/2026 - 5/31/2027</strong>
+                        </p>
+
+                        <p>
+                            El Paso, Texas
+                        </p>
+
+                        <p>
+                            My favorite part of working at CAHSI is helping women in computing grow academically and professionally while connecting them with opportunities that empower them to succeed in technology.
+                        </p>
+
+                        <div class="carousel-counter">
+                            2 of 2
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button class="carousel-btn next-btn">&#10095;</button>
+
+            </div>
+        `, {
+                maxWidth: 350,
+                minWidth: 320,
+                autoPan: true,
+                autoPanPadding: [50, 50],
+                closeOnClick: false
+            });
+            
+// =================================================
+// UTEP CAROUSEL FUNCTIONALITY
+// =================================================
+
+let currentUtepSlide = 0;
+let utepCloseTimer;
+
+
+// Open popup when hovering over UTEP marker
+utepMarker.on("mouseover", function () {
+
+    clearTimeout(utepCloseTimer);
+    utepMarker.openPopup();
+
+});
+
+
+// Give user time to move from marker to popup
+utepMarker.on("mouseout", function () {
+
+    clearTimeout(utepCloseTimer);
+
+    utepCloseTimer = setTimeout(function () {
+        utepMarker.closePopup();
+    }, 1200);
+
+});
+
+
+utepMarker.on("popupopen", function () {
+
+    const popupElement = utepMarker.getPopup().getElement();
+
+    if (!popupElement) {
+        return;
+    }
+
+    // Prevent interactions with carousel from reaching the map
+    L.DomEvent.disableClickPropagation(popupElement);
+    L.DomEvent.disableScrollPropagation(popupElement);
+
+
+    // Keep popup open when mouse enters it
+    popupElement.onmouseenter = function () {
+        clearTimeout(utepCloseTimer);
+    };
+
+
+    // ALSO keep it open as soon as user presses inside popup
+    popupElement.onmousedown = function () {
+        clearTimeout(utepCloseTimer);
+    };
+
+
+    // Close after actually leaving the popup
+    popupElement.onmouseleave = function () {
+
+        clearTimeout(utepCloseTimer);
+
+        utepCloseTimer = setTimeout(function () {
+            utepMarker.closePopup();
+        }, 800);
+    };
+
+
+    const slides =
+        popupElement.querySelectorAll(".carousel-slide");
+
+    const nextButton =
+        popupElement.querySelector(".next-btn");
+
+    const prevButton =
+    popupElement.querySelector(".prev-btn");
+
+
+    function showSlide(index) {
+
+        slides.forEach(function (slide) {
+            slide.classList.remove("active");
+        });
+
+        slides[index].classList.add("active");
+    }
+
+
+    // NEXT
+    nextButton.onmousedown = function (event) {
+        event.stopPropagation();
+        clearTimeout(utepCloseTimer);
+    };
+
+    nextButton.onclick = function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        clearTimeout(utepCloseTimer);
+
+        currentUtepSlide =
+            (currentUtepSlide + 1) % slides.length;
+
+        showSlide(currentUtepSlide);
+    };
+
+
+    // PREVIOUS
+    prevButton.onmousedown = function (event) {
+        event.stopPropagation();
+        clearTimeout(utepCloseTimer);
+    };
+
+    prevButton.onclick = function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        clearTimeout(utepCloseTimer);
+
+        currentUtepSlide--;
+
+        if (currentUtepSlide < 0) {
+            currentUtepSlide = slides.length - 1;
+        }
+
+        showSlide(currentUtepSlide);
+    };
+
+
+    showSlide(currentUtepSlide);
+});
+
+    // =================================================
+    // Brookhaven National Laboratory
+    // =================================================
+
+        const brookhavenIcon = L.icon({
+            iconUrl: "images/brookhaven.png",
+            iconSize: [90, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        const brookhavenMarker = L.marker(
+            [40.8681, -72.8796],
+            { icon: brookhavenIcon }
+        );
+
+        brookhavenMarker.bindPopup(`
+            <div class="internship-popup">
+
+                <h3>Brookhaven National Laboratory</h3>
+
+                <h4>
+                    <strong>Aleida Holguin</strong>
+                </h4>
+
+                <p>
+                    <strong>Machine Learning Research Intern</strong>
+                </p>
+
+                <p>
+                    <strong>6/2/2025 - 08/08/2025</strong>
+                </p>
+
+                <p>
+                    Long Island, New York
+                </p>
+
+                <p>
+                    I trained a machine learning model using 4D Spatiotemporal data. The data used was Fmri images (brain scans). Initially I went in with no prior knowledge but I learned so much along the way!
+                </p>
+
+            </div>
+        `);
+
+        brookhavenMarker.on("mouseover", function () {
+            this.openPopup();
+        });
+
+        brookhavenMarker.on("mouseout", function () {
+            this.closePopup();
+        });
+
+        // =================================================
+        // NVIDIA
+        // =================================================
+
+        const nvidiaIcon = L.icon({
+            iconUrl: "images/nvidia.png",
+            iconSize: [60, 60],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        const nvidiaMarker = L.marker(
+            [37.3707, -121.9641],
+            { icon: nvidiaIcon }
+        );
+
+        nvidiaMarker.bindPopup(`
+            <div class="internship-popup">
+
+                <h3>NVIDIA</h3>
+
+                <h4>
+                    <strong>Monet Nevarez</strong>
+                </h4>
+
+                <p>
+                    <strong>AI Development Intern </strong>
+                </p>
+
+                <p>
+                    <strong>5/27/2026 - 09/04/2026</strong>
+                </p>
+
+                <p>
+                    Santa Clara, California
+                </p>
+
+                <p>
+                    Evaluating and implementing different optimization techniques for vision transformer models. My favorite part was learning about underlying the hardware implications for speed and memory!
+                </p>
+
+            </div>
+        `);
+
+        nvidiaMarker.on("mouseover", function () {
+            this.openPopup();
+        });
+
+        nvidiaMarker.on("mouseout", function () {
+            this.closePopup();
+        });
+
+        // =================================================
+        // Google
+        // =================================================
+
+        const googleIcon = L.icon({
+            iconUrl: "images/google.png",
+            iconSize: [60, 60],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        const googleMarker = L.marker(
+            [37.4220, -122.0841],
+            { icon: googleIcon }
+        );
+
+        googleMarker.bindPopup(`
+            <div class="internship-popup">
+
+                <h3>Google</h3>
+
+                <h4>
+                    <strong>Victoria Lozano Martínez</strong>
+                </h4>
+
+                <p>
+                    <strong>Associate Software Developer Intern</strong>
+                </p>
+
+                <p>
+                    <strong>5/19/2025 - 8/8/2025</strong>
+                </p>
+
+                <p>
+                    Mountain View, California
+                </p>
+
+                <p>
+                    Developed and launched new cancellation and refund functionalities for Google One by building scalable backend services and workflows that integrated with external partner systems. Collaborated with cross-functional teams to design, implement, and support reliable payment transaction processes.
+                </p>
+
+            </div>
+        `);
+
+        googleMarker.on("mouseover", function () {
+            this.openPopup();
+        });
+
+        googleMarker.on("mouseout", function () {
+            this.closePopup();
+        });
+
+        // =================================================
+        // Bloomberg
+        // =================================================
+
+        const bloombergIcon = L.icon({
+            iconUrl: "images/bloomberg.png",
+            iconSize: [60, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+
+        const bloombergMarker = L.marker(
+            [40.7616, -73.9672],
+            { icon: bloombergIcon }
+        );
+
+        bloombergMarker.bindPopup(`
+            <div class="internship-popup">
+
+                <h3>Bloomberg</h3>
+
+                <h4>
+                    <strong>Daniela Castro Enriquez</strong>
+                </h4>
+
+                <p>
+                    <strong>Software Engineer Intern</strong>
+                </p>
+
+                <p>
+                    <strong>6/1/2026 - 8/14/2026</strong>
+                </p>
+
+                <p>
+                    New York City, New York
+                </p>
+
+                <p>
+                    I worked under Bloomberg Law department to create a new feature for their website for data enhancement.
+                </p>
+
+            </div>
+        `);
+
+        bloombergMarker.on("mouseover", function () {
+            this.openPopup();
+        });
+
+        bloombergMarker.on("mouseout", function () {
+            this.closePopup();
+        });
 
         // =================================================
         // CLICK REGION TO ZOOM IN
@@ -495,7 +947,7 @@
 
             map.flyTo(
                 [47.5, -122.2],
-                9
+                9.5
             );
 
             map.removeLayer(washingtonRegion);
@@ -544,6 +996,21 @@
             map.removeLayer(northeastRegion);
 
             princetonMarker.addTo(map);
+            brookhavenMarker.addTo(map);
+            bloombergMarker.addTo(map);
+        });
+
+        sanFranciscoBayRegion.on("click", function () {
+
+            map.flyTo(
+                [37.55, -122.10],
+                10 //zoom amount
+            );
+
+            map.removeLayer(sanFranciscoBayRegion);
+
+            nvidiaMarker.addTo(map);
+            googleMarker.addTo(map);
         });
 
 
@@ -559,10 +1026,7 @@
 
             if (zoom <= 5) {
 
-                // -----------------------------
                 // Hide individual internships
-                // -----------------------------
-
                 if (map.hasLayer(microsoftMarker)) {
                     map.removeLayer(microsoftMarker);
                 }
@@ -583,17 +1047,28 @@
                     map.removeLayer(princetonMarker);
                 }
 
-                // Hide UTEP
                 if (map.hasLayer(utepRegion)) {
                     map.removeLayer(utepRegion);
                 }
-                
+
+                if (map.hasLayer(brookhavenMarker)) {
+                    map.removeLayer(brookhavenMarker);
+                }
+
+                if (map.hasLayer(nvidiaMarker)) {
+                    map.removeLayer(nvidiaMarker);
+                }
+
+                if (map.hasLayer(googleMarker)) {
+                    map.removeLayer(googleMarker);
+                }
+
+                if (map.hasLayer(bloombergMarker)) {
+                    map.removeLayer(bloombergMarker);
+                }
 
 
-                // -----------------------------
-                // Restore regional markers
-                // -----------------------------
-
+                // Restore region markers
                 if (!map.hasLayer(washingtonRegion)) {
                     washingtonRegion.addTo(map);
                 }
@@ -606,7 +1081,11 @@
                     northeastRegion.addTo(map);
                 }
 
-            }else if (zoom >= 6 && zoom <= 9) {
+                if (!map.hasLayer(sanFranciscoBayRegion)) {
+                    sanFranciscoBayRegion.addTo(map);
+                }
+
+            } else if (zoom >= 6 && zoom <= 9) {
 
                 // Hide general El Paso marker
                 if (map.hasLayer(elPasoRegion)) {
@@ -617,17 +1096,20 @@
                 if (!map.hasLayer(utepRegion)) {
                     utepRegion.addTo(map);
                 }
-            }else if (zoom >= 10) {
+
+            } else if (zoom >= 10) {
 
                 // Hide UTEP region marker
                 if (map.hasLayer(utepRegion)) {
                     map.removeLayer(utepRegion);
                 }
-
-                // Individual UTEP-area internships would be shown here
             }
 
         });
+
+
+
+
 
     </script>
 
