@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Girls Who Code UTEP – Officer Login</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" href="images/logo.png" type="image/x-icon">
+</head>
+<body>
+
+<!-- Loading screen shown until Firebase resolves auth state -->
+<div id="loadingScreen">
+  <div class="spinner"></div>
+</div>
+
+<!-- Page content hidden until ready -->
+<div id="pageContent">
+  <section class="sub-header">
+    <nav>
+      <a href="index.html"><img src="images/logo.png"></a>
+      <div class="nav-links" id="navLinks">
+        <i class="fa fa-close" onclick="hideMenu()"></i>
+        <ul>
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="about.html">ABOUT</a></li>
+          <li><a href="officers.html">OFFICERS</a></li>
+          <li><a href="getinvolved.html">GET INVOLVED</a></li>
+          <li><a href="workshops.html">WORKSHOPS</a></li>
+          <li><a href="points.html">ATTENDANCE</a></li>
+          <li><a href="calendar.html">CALENDAR</a></li>
+          <li><a href="contact.html">CONTACT</a></li>
+        </ul>
+      </div>
+      <i class="fa fa-bars" onclick="showMenu()"></i>
+    </nav>
+    <h1>Officer Portal</h1>
+  </section>
+
+  <div class="login-wrapper">
+    <div class="login-box" id="loginBox">
+      <img src="images/logo.png" alt="GWC Logo">
+      <h2>Officer Login</h2>
+      <p>Sign in with your UTEP email to access the dashboard.</p>
+
+      <label for="loginEmail">UTEP Email</label>
+      <input type="email" id="loginEmail" placeholder="you@miners.utep.edu">
+
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" placeholder="Enter your password">
+
+      <button class="login-btn" id="loginBtn">Sign In</button>
+      <div id="loginMessage"></div>
+
+      <button type="button" class="auth-switch-link" id="showSignupBtn">New officer? Create account</button>
+    </div>
+
+    <div class="login-box" id="signupBox" style="display:none;">
+      <img src="images/logo.png" alt="GWC Logo">
+      <h2>Create Officer Account</h2>
+      <p>You'll need the officer signup code — ask a current officer if you don't have it.</p>
+
+      <label for="signupName">Full Name</label>
+      <input type="text" id="signupName" placeholder="e.g. Maria Garcia">
+
+      <label for="signupRole">Officer Role</label>
+      <input type="text" id="signupRole" placeholder="e.g. Secretary, Events Officer">
+
+      <label for="signupEmail">UTEP Email</label>
+      <input type="email" id="signupEmail" placeholder="you@miners.utep.edu">
+
+      <label for="signupPassword">Password</label>
+      <input type="password" id="signupPassword" placeholder="Create a password (min 6 characters)">
+
+      <label for="signupCode">Signup Code</label>
+      <input type="text" id="signupCode" placeholder="Enter the officer signup code">
+
+      <button class="login-btn" id="signupBtn">Create Account</button>
+      <div id="signupMessage"></div>
+
+      <button type="button" class="auth-switch-link" id="showLoginBtn">Already have an account? Sign in</button>
+    </div>
+  </div>
+
+  <section class="footer">
+    <h4>About Us</h4>
+    <p>&copy 2025 Girls Who Code UTEP Chapter. Made with passion and teamwork.</p>
+    <div class="icons">
+      <a href="https://www.facebook.com/GirlsWhoCode" target="_blank"><i class="fa fa-facebook"></i></a>
+      <a href="https://x.com/girlswhocode" target="_blank"><i class="fa fa-twitter"></i></a>
+      <a href="https://www.instagram.com/gwcutep/" target="_blank"><i class="fa fa-instagram"></i></a>
+      <a href="https://www.linkedin.com/company/girls-who-code-utep/posts/?feedView=all" target="_blank"><i class="fa fa-linkedin"></i></a>
+      <a href="https://teams.microsoft.com/v2/" target="_blank"><i class="fa fa-users"></i></a>
+      <a href="https://minetracker.utep.edu/organization/girlswhocodeutep" target="_blank"><i class="fa fa-star"></i></a>
+    </div>
+    <a class="footer-link"><p>made with <i class="fa fa-heart-o"></i> by GWC</p></a>
+  </section>
+</div>
+
+<script>
+  var navLinks = document.getElementById("navLinks");
+  function showMenu() { navLinks.style.right = "0"; }
+  function hideMenu() { navLinks.style.right = "-200px"; }
+</script>
+
+<script type="module">
+  import { app } from "./firebase-config.js";
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, Timestamp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  async function sha256(message) {
+    const msgBuffer  = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+    const hashArray  = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  let justSignedUp = false; // true while handleSignup() is showing its own confirmation before redirecting
+
+  // Wait for Firebase to resolve auth state ONCE before showing anything
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      if (justSignedUp) return; // handleSignup() controls the redirect in this case
+      // Already logged in — go to dashboard (no flicker, loading screen covers it)
+      window.location.replace("officer-dashboard.html");
+    } else {
+      // Not logged in — show the login form
+      document.getElementById("loadingScreen").style.display = "none";
+      document.getElementById("pageContent").style.display = "block";
+    }
+  });
+
+  // ── Sign In / Create Account toggle ───────────────────────
+  document.getElementById("showSignupBtn").addEventListener("click", () => {
+    document.getElementById("loginBox").style.display  = "none";
+    document.getElementById("signupBox").style.display = "block";
+  });
+  document.getElementById("showLoginBtn").addEventListener("click", () => {
+    document.getElementById("signupBox").style.display = "none";
+    document.getElementById("loginBox").style.display  = "block";
+  });
+
+  // Sign in
+  document.getElementById("loginBtn").addEventListener("click", handleLogin);
+  document.getElementById("loginPassword").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") handleLogin();
+  });
+
+  async function handleLogin() {
+    const btn = document.getElementById("loginBtn");
+    const msg = document.getElementById("loginMessage");
+    msg.className = "";
+    msg.style.display = "none";
+
+    const email    = document.getElementById("loginEmail").value.trim().toLowerCase();
+    const password = document.getElementById("loginPassword").value;
+
+    if (!email.endsWith("@miners.utep.edu") && !email.endsWith("@utep.edu")) {
+      msg.textContent = "Please use your UTEP email (@miners.utep.edu or @utep.edu).";
+      msg.className = "error";
+      return;
+    }
+
+    if (!password) {
+      msg.textContent = "Please enter your password.";
+      msg.className = "error";
+      return;
+    }
+
+    try {
+      btn.disabled = true;
+      btn.textContent = "Signing in…";
+      await signInWithEmailAndPassword(auth, email, password);
+      // onAuthStateChanged will fire and redirect automatically
+    } catch (err) {
+      let errorMsg = "Incorrect email or password. Please try again.";
+      if (err.code === "auth/too-many-requests") {
+        errorMsg = "Too many failed attempts. Please try again later.";
+      }
+      msg.textContent = errorMsg;
+      msg.className = "error";
+      btn.disabled = false;
+      btn.textContent = "Sign In";
+    }
+  }
+
+  // ── Create Account ─────────────────────────────────────────
+  document.getElementById("signupBtn").addEventListener("click", handleSignup);
+
+  async function handleSignup() {
+    const btn = document.getElementById("signupBtn");
+    const msg = document.getElementById("signupMessage");
+    msg.className = "";
+    msg.style.display = "none";
+
+    const fullName = document.getElementById("signupName").value.trim();
+    const role     = document.getElementById("signupRole").value.trim();
+    const email    = document.getElementById("signupEmail").value.trim().toLowerCase();
+    const password = document.getElementById("signupPassword").value;
+    const code     = document.getElementById("signupCode").value.trim();
+
+    if (!fullName) { showSignupError("Please enter your full name."); return; }
+    if (!role)     { showSignupError("Please enter your officer role."); return; }
+    if (!email.endsWith("@miners.utep.edu") && !email.endsWith("@utep.edu")) {
+      showSignupError("Please use your UTEP email (@miners.utep.edu or @utep.edu)."); return;
+    }
+    if (password.length < 6) { showSignupError("Password must be at least 6 characters."); return; }
+    if (!code) { showSignupError("Please enter the officer signup code."); return; }
+
+    function showSignupError(text) {
+      msg.textContent = text;
+      msg.className = "error";
+      btn.disabled = false;
+      btn.textContent = "Create Account";
+    }
+
+    try {
+      btn.disabled = true;
+      btn.textContent = "Verifying code…";
+
+      const codeDoc = await getDoc(doc(db, "config", "officerSignup"));
+      if (!codeDoc.exists() || !codeDoc.data().codeHash) {
+        showSignupError("Officer signup isn't set up yet. Ask an existing officer to set a signup code from the dashboard.");
+        return;
+      }
+
+      const enteredHash = await sha256(code);
+      if (enteredHash !== codeDoc.data().codeHash) {
+        showSignupError("Incorrect signup code. Ask a current officer for the code.");
+        return;
+      }
+
+      btn.textContent = "Creating account…";
+      justSignedUp = true;
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(cred.user, { displayName: fullName });
+
+      await setDoc(doc(db, "officers", cred.user.uid), {
+        fullName,
+        role,
+        email,
+        createdAt: Timestamp.now()
+      });
+
+      msg.textContent = `Account created! Redirecting you to the dashboard…`;
+      msg.className = "success";
+      btn.textContent = "Success!";
+      setTimeout(() => window.location.replace("officer-dashboard.html"), 1500);
+    } catch (err) {
+      justSignedUp = false;
+      let errorMsg = "Something went wrong creating your account.";
+      if (err.code === "auth/email-already-in-use") errorMsg = "An account with that email already exists. Try signing in instead.";
+      else if (err.code === "auth/invalid-email")    errorMsg = "That doesn't look like a valid email.";
+      else if (err.code === "auth/weak-password")    errorMsg = "Password must be at least 6 characters.";
+      showSignupError(errorMsg);
+    }
+  }
+</script>
+
+</body>
+</html>
