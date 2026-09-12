@@ -2,93 +2,15 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Girls Who Code UTEP – Submit Attendance</title>
+<title>Girls Who Code UTEP – Workshop Points</title>
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,600,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="icon" href="images/logo.png" type="image/x-icon">
-
-<style>
-  .points-intro {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 60px 20px 20px;
-    text-align: center;
-  }
-  .points-intro h1 { font-size: 32px; margin-bottom: 12px; }
-  .points-intro p  { font-size: 16px; color: #555; }
-
-  .points-form-section {
-    max-width: 600px;
-    margin: 30px auto 80px;
-    padding: 40px;
-    background: #f9f9f9;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  }
-
-  .points-form-section label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 6px;
-    margin-top: 18px;
-  }
-
-  .points-form-section input,
-  .points-form-section select {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    outline: none;
-    box-sizing: border-box;
-    transition: border 0.3s;
-    background: #fff;
-  }
-
-  .points-form-section input:focus,
-  .points-form-section select:focus { border-color: #009688; }
-
-  .submit-btn {
-    width: 100%;
-    margin-top: 28px;
-    padding: 14px;
-    background: #009688;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  .submit-btn:hover    { background: #00796B; }
-  .submit-btn:disabled { background: #aaa; cursor: not-allowed; }
-
-  #formMessage {
-    margin-top: 20px;
-    padding: 14px;
-    border-radius: 8px;
-    font-size: 14px;
-    text-align: center;
-    display: none;
-  }
-  #formMessage.success { background: #e0f2f1; color: #00695c; border: 1px solid #80cbc4; display: block; }
-  #formMessage.error   { background: #fce4ec; color: #b71c1c; border: 1px solid #f48fb1; display: block; }
-
-  .note { font-size: 12px; color: #888; margin-top: 4px; }
-
-  @media (max-width: 640px) {
-    .points-form-section { margin: 20px 16px 60px; padding: 24px 20px; }
-  }
-</style>
 </head>
 <body>
+
+<div id="toast" class="toast" role="status"></div>
 
 <section class="sub-header">
   <nav>
@@ -101,45 +23,75 @@
         <li><a href="officers.html">OFFICERS</a></li>
         <li><a href="getinvolved.html">GET INVOLVED</a></li>
         <li><a href="workshops.html">WORKSHOPS</a></li>
+          <li><a href="points.html">ATTENDANCE</a></li>
         <li><a href="calendar.html">CALENDAR</a></li>
         <li><a href="contact.html">CONTACT</a></li>
       </ul>
     </div>
     <i class="fa fa-bars" onclick="showMenu()"></i>
   </nav>
-  <h1>Submit Attendance</h1>
+  <h1>Workshop Points</h1>
 </section>
 
 <div class="points-intro">
-  <h1>Log Your Workshop Points</h1>
-  <p>Select the workshop you attended, enter your info, and type in the attendance code your officer shared during the event.</p>
+  <h1>Workshop Points</h1>
+  <p>Submit your attendance code or see where you rank on the leaderboard.</p>
 </div>
 
-<div class="points-form-section">
-  <form id="attendanceForm">
+<div class="points-tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="submit">Submit Attendance</button>
+    <button class="tab-btn" data-tab="leaderboard">Leaderboard</button>
+  </div>
 
-    <label for="firstName">First Name</label>
-    <input type="text" id="firstName" placeholder="e.g. Maria" required>
+  <div class="tab-panel active" id="tab-submit">
+    <div class="points-form-section">
+      <form id="attendanceForm">
 
-    <label for="lastName">Last Name</label>
-    <input type="text" id="lastName" placeholder="e.g. Garcia" required>
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" placeholder="e.g. Maria" required>
 
-    <label for="email">UTEP Email</label>
-    <input type="email" id="email" placeholder="e.g. mgarcia@miners.utep.edu" required>
-    <p class="note">Must end in @miners.utep.edu or @utep.edu</p>
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" placeholder="e.g. Garcia" required>
 
-    <label for="workshopSelect">Workshop Attended</label>
-    <select id="workshopSelect" required>
-      <option value="">— Loading workshops… —</option>
-    </select>
+        <label for="email">UTEP Email</label>
+        <input type="email" id="email" placeholder="e.g. mgarcia@miners.utep.edu" required>
+        <p class="note">Must be a valid UTEP or EPCC email</p>
 
-    <label for="attendanceCode">Attendance Code</label>
-    <input type="text" id="attendanceCode" placeholder="Enter the 5-digit code from your officer" maxlength="5" required>
-    <p class="note">This code is only valid for a limited time during the event.</p>
+        <label for="workshopSelect">Activity Attended</label>
+        <select id="workshopSelect" required>
+          <option value="">— Loading activities… —</option>
+        </select>
 
-    <button type="submit" class="submit-btn" id="submitBtn">Submit Attendance</button>
-    <div id="formMessage"></div>
-  </form>
+        <label for="attendanceCode">Attendance Code</label>
+        <input type="text" id="attendanceCode" placeholder="Enter the 5-digit code from your officer" maxlength="5" required>
+        <p class="note">This code is only valid for a limited time during the event.</p>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Submit Attendance</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-leaderboard">
+    <div class="leaderboard-section">
+      <div class="podium" id="podium"></div>
+      <div class="leaderboard-table-wrap">
+        <table class="submissions-table leaderboard-table">
+          <thead>
+            <tr>
+              <th class="rank-col">Rank</th>
+              <th>Name</th>
+              <th>Points</th>
+              <th>Activities</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody">
+            <tr><td colspan="4" class="empty-state">Select this tab to load the leaderboard.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Footer -->
@@ -155,6 +107,7 @@
     <a href="https://minetracker.utep.edu/organization/girlswhocodeutep" target="_blank"><i class="fa fa-star"></i></a>
   </div>
   <a class="footer-link"><p>made with <i class="fa fa-heart-o"></i> by GWC</p></a>
+        <a class="officer-link" href="officer-login.html">Officer Login</a>
 </section>
 
 <script>
@@ -164,30 +117,86 @@
 </script>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { app } from "./firebase-config.js";
   import { getFirestore, collection, addDoc, getDoc, getDocs, doc, query, where, orderBy, Timestamp }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // ✅ PASTE YOUR REAL CONFIG VALUES HERE
-  const firebaseConfig = {
-    apiKey: "AIzaSyAHTRf40x8Z6gfSM-2yQOn825IRsEV3sfg",
-    authDomain: "gwc-tracker-84577.firebaseapp.com",
-    projectId: "gwc-tracker-84577",
-    storageBucket: "gwc-tracker-84577.firebasestorage.app",
-    messagingSenderId: "250632343424",
-    appId: "1:250632343424:web:e977f8bc2c2f581c3f7b65",
-    measurementId: "G-DVK995JRFJ"
-  };
+  const db = getFirestore(app);
 
-  const app = initializeApp(firebaseConfig);
-  const db  = getFirestore(app);
+  // ── Tab switching ────────────────────────────────────────
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+      if (btn.dataset.tab === "leaderboard") loadLeaderboard();
+    });
+  });
+
+  // ── Leaderboard ──────────────────────────────────────────
+  async function loadLeaderboard() {
+    const tbody = document.getElementById("leaderboardBody");
+    tbody.innerHTML = "<tr><td colspan='4' class='empty-state'>Loading…</td></tr>";
+
+    const snap = await getDocs(collection(db, "attendance"));
+
+    const totals = new Map(); // email -> { name, points, workshops }
+    snap.forEach(d => {
+      const s = d.data();
+      if (!totals.has(s.email)) {
+        const lastInitial = s.lastName ? s.lastName.charAt(0).toUpperCase() + "." : "";
+        totals.set(s.email, { name: `${s.firstName} ${lastInitial}`.trim(), points: 0, workshops: 0 });
+      }
+      const entry = totals.get(s.email);
+      entry.points    += s.pointsAwarded || 0;
+      entry.workshops += 1;
+    });
+
+    const ranked = Array.from(totals.values()).sort((a, b) => b.points - a.points);
+
+    renderPodium(ranked.slice(0, 3));
+
+    if (!ranked.length) {
+      tbody.innerHTML = "<tr><td colspan='4' class='empty-state'>No points logged yet. Be the first!</td></tr>";
+      return;
+    }
+
+    const medals = { 1: "gold", 2: "silver", 3: "bronze" };
+    tbody.innerHTML = ranked.map((entry, i) => {
+      const rank = i + 1;
+      return `
+        <tr>
+          <td class="rank-col"><span class="rank-badge ${medals[rank] || ""}">${rank}</span></td>
+          <td>${entry.name}</td>
+          <td>${entry.points}</td>
+          <td>${entry.workshops}</td>
+        </tr>`;
+    }).join("");
+  }
+
+  function renderPodium(top3) {
+    const podium = document.getElementById("podium");
+    const medalEmoji = { 1: "🥇", 2: "🥈", 3: "🥉" };
+
+    podium.innerHTML = top3.map((entry, i) => {
+      const rank = i + 1;
+      return `
+        <div class="podium-place place-${rank}">
+          <div class="podium-medal">${medalEmoji[rank]}</div>
+          <div class="podium-name">${entry.name}</div>
+          <div class="podium-points">${entry.points} pts</div>
+          <div class="podium-stand">${rank}</div>
+        </div>`;
+    }).join("");
+  }
 
   // ── Populate workshop dropdown ───────────────────────────
   const workshopSelect = document.getElementById("workshopSelect");
 
   async function loadWorkshops() {
     const snap = await getDocs(query(collection(db, "workshops"), orderBy("createdAt", "asc")));
-    workshopSelect.innerHTML = "<option value=''>— Select a workshop —</option>";
+    workshopSelect.innerHTML = "<option value=''>— Select an activity —</option>";
     snap.forEach(d => {
       const opt = new Option(d.data().name, d.id);
       workshopSelect.appendChild(opt);
@@ -200,10 +209,7 @@
   document.getElementById("attendanceForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const btn  = document.getElementById("submitBtn");
-    const msg  = document.getElementById("formMessage");
-    msg.className = "";
-    msg.style.display = "none";
+    const btn = document.getElementById("submitBtn");
 
     const firstName  = capitalize(document.getElementById("firstName").value.trim());
     const lastName   = capitalize(document.getElementById("lastName").value.trim());
@@ -213,12 +219,12 @@
 
     // Validate email
     if (!email.endsWith("@miners.utep.edu") && !email.endsWith("@utep.edu")) {
-      showMessage("Please use your UTEP email (@miners.utep.edu or @utep.edu).", "error");
+      showMessage("Please use your UTEP email (@miners.utep.edu or @my.epcc.edu).", "error");
       return;
     }
 
     if (!workshopId) {
-      showMessage("Please select a workshop.", "error");
+      showMessage("Please select an activity.", "error");
       return;
     }
 
@@ -235,7 +241,7 @@
       const codeDoc = await getDoc(doc(db, "activeCodes", workshopId));
 
       if (!codeDoc.exists()) {
-        showMessage("No active code found for this workshop. Ask your officer to generate one.", "error");
+        showMessage("No active code found for this activity. Ask your officer to generate one.", "error");
         btn.disabled = false;
         btn.textContent = "Submit Attendance";
         return;
@@ -268,7 +274,7 @@
       ));
 
       if (!dupSnap.empty) {
-        showMessage("You've already submitted attendance for this workshop!", "error");
+        showMessage("You've already submitted attendance for this activity!", "error");
         btn.disabled = false;
         btn.textContent = "Submit Attendance";
         return;
@@ -286,9 +292,9 @@
         submittedAt:   Timestamp.now()
       });
 
-      showMessage(`✅ Success! You earned ${activeCode.pointsAwarded} points for "${activeCode.workshopName}".`, "success");
+      showMessage(`Success! You earned ${activeCode.pointsAwarded} points for "${activeCode.workshopName}".`, "success");
       document.getElementById("attendanceForm").reset();
-      workshopSelect.innerHTML = "<option value=''>— Select a workshop —</option>";
+      workshopSelect.innerHTML = "<option value=''>— Select an activity —</option>";
       loadWorkshops();
 
     } catch (err) {
@@ -304,10 +310,28 @@
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
 
+  let toastTimeout = null;
+
   function showMessage(text, type) {
-    const msg = document.getElementById("formMessage");
-    msg.textContent = text;
-    msg.className = type;
+    const toast = document.getElementById("toast");
+    toast.textContent = text;
+
+    const closeBtn = document.createElement("button");
+    closeBtn.className = "toast-close";
+    closeBtn.type = "button";
+    closeBtn.setAttribute("aria-label", "Dismiss");
+    closeBtn.textContent = "×";
+    closeBtn.addEventListener("click", hideToast);
+    toast.appendChild(closeBtn);
+
+    toast.className = "toast show " + type;
+
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(hideToast, 5000);
+  }
+
+  function hideToast() {
+    document.getElementById("toast").classList.remove("show");
   }
 </script>
 
