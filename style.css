@@ -1245,12 +1245,9 @@ body { background: #fff; }
     cursor: pointer;
     transition: background 0.3s;
     white-space: nowrap;
-<<<<<<< HEAD
     margin-left: auto;
     min-width: 170px;
     text-align: center;
-=======
->>>>>>> intern_map
 }
 .dashboard .teal-btn:hover    { background: #00796B; }
 .dashboard .teal-btn:disabled { background: #aaa; cursor: not-allowed; }
@@ -1430,13 +1427,10 @@ body { background: #fff; }
     .submissions-table th,
     .submissions-table td { padding: 8px; }
     .active-code-box .big-code { font-size: 44px; letter-spacing: 8px; }
-<<<<<<< HEAD
     .dashboard .teal-btn {
         width: 100%;
         margin-left: 0;
     }
-=======
->>>>>>> intern_map
 }
 
 /*--------------- News Feed Page --------------*/
@@ -1647,8 +1641,6 @@ body { background: #fff; }
   }
 
 }
-<<<<<<< HEAD
-=======
 
 
 /*Internship Map Page*/
@@ -1797,4 +1789,3 @@ body { background: #fff; }
     border-radius: 12px;
     z-index: 1;
 }
->>>>>>> intern_map
