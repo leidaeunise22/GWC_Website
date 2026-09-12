@@ -967,21 +967,9 @@ utepMarker.on("popupopen", function () {
 
             map.removeLayer(elPasoRegion);
 
-            utepRegion.addTo(map);
+            utepMarker.addTo(map);
             whiteSandsMarker.addTo(map);
 
-        });
-
-        utepRegion.on("click", function () {
-
-            map.flyTo(
-                [31.7700, -106.5048],
-                11
-            );
-
-            map.removeLayer(utepRegion);
-
-            // whiteSandsMarker.addTo(map);
         });
 
 
@@ -1047,10 +1035,6 @@ utepMarker.on("popupopen", function () {
                     map.removeLayer(princetonMarker);
                 }
 
-                if (map.hasLayer(utepRegion)) {
-                    map.removeLayer(utepRegion);
-                }
-
                 if (map.hasLayer(brookhavenMarker)) {
                     map.removeLayer(brookhavenMarker);
                 }
@@ -1065,6 +1049,10 @@ utepMarker.on("popupopen", function () {
 
                 if (map.hasLayer(bloombergMarker)) {
                     map.removeLayer(bloombergMarker);
+                }
+
+                if (map.hasLayer(utepMarker)) {
+                    map.removeLayer(utepMarker);
                 }
 
 
@@ -1085,25 +1073,7 @@ utepMarker.on("popupopen", function () {
                     sanFranciscoBayRegion.addTo(map);
                 }
 
-            } else if (zoom >= 6 && zoom <= 9) {
-
-                // Hide general El Paso marker
-                if (map.hasLayer(elPasoRegion)) {
-                    map.removeLayer(elPasoRegion);
-                }
-
-                // Show UTEP region
-                if (!map.hasLayer(utepRegion)) {
-                    utepRegion.addTo(map);
-                }
-
-            } else if (zoom >= 10) {
-
-                // Hide UTEP region marker
-                if (map.hasLayer(utepRegion)) {
-                    map.removeLayer(utepRegion);
-                }
-            }
+            } 
 
         });
 
