@@ -1245,9 +1245,12 @@ body { background: #fff; }
     cursor: pointer;
     transition: background 0.3s;
     white-space: nowrap;
+<<<<<<< HEAD
     margin-left: auto;
     min-width: 170px;
     text-align: center;
+=======
+>>>>>>> intern_map
 }
 .dashboard .teal-btn:hover    { background: #00796B; }
 .dashboard .teal-btn:disabled { background: #aaa; cursor: not-allowed; }
@@ -1427,10 +1430,13 @@ body { background: #fff; }
     .submissions-table th,
     .submissions-table td { padding: 8px; }
     .active-code-box .big-code { font-size: 44px; letter-spacing: 8px; }
+<<<<<<< HEAD
     .dashboard .teal-btn {
         width: 100%;
         margin-left: 0;
     }
+=======
+>>>>>>> intern_map
 }
 
 /*--------------- News Feed Page --------------*/
@@ -1641,3 +1647,154 @@ body { background: #fff; }
   }
 
 }
+<<<<<<< HEAD
+=======
+
+
+/*Internship Map Page*/
+/* Internship Map */
+
+.internship-map {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 50px 0;
+}
+
+.map-intro {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.map-intro h2 {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.map-intro p {
+    color: #777;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+
+/* Map */
+
+#map {
+    width: 100%;
+    height: 600px;
+    position: relative;
+    z-index: 1;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+
+/* Prevent other site CSS from resizing Leaflet tiles */
+
+#map img {
+    max-width: none !important;
+}
+
+
+/* Popup */
+
+.internship-popup {
+    font-family: "Poppins", sans-serif;
+}
+
+.internship-popup h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+}
+
+.internship-popup p {
+    margin: 5px 0;
+    font-size: 12px;
+}
+
+/* UTEP Carousel */
+
+.carousel {
+    display: flex;
+    align-items: center;
+    width: 320px;
+    max-width: 320px;
+}
+
+.carousel-content {
+    width: 100%;
+    overflow: hidden;
+}
+
+.carousel-slide {
+    display: none;
+    width: 100%;
+}
+
+.carousel-slide.active {
+    display: block;
+}
+
+.carousel-btn {
+    position: absolute;
+    bottom: 5px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0.4;
+    z-index: 1000;
+    pointer-events: auto;
+}
+
+.prev-btn {
+    left: 5px;
+}
+
+.next-btn {
+    right: 5px;
+}
+
+.carousel-btn:hover {
+    opacity: 0.2;
+}
+
+.carousel-counter {
+    text-align: center;
+    font-size: 11px;
+    color: #777;
+    margin-top: 10px;
+}
+
+/* ============================= */
+/* Internship Map */
+/* ============================= */
+
+.internship-map {
+    width: 90%;
+    margin: auto;
+    padding: 60px 0;
+}
+
+.map-intro {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.map-intro h2 {
+    font-size: 36px;
+    font-weight: 600;
+}
+
+.map-intro p {
+    margin-top: 10px;
+}
+
+#map {
+    width: 100%;
+    height: 650px;
+    border-radius: 12px;
+    z-index: 1;
+}
+>>>>>>> intern_map
